@@ -278,15 +278,17 @@
   }
   .form button:hover{ background:var(--ink); }
   .form-note{ font-size:12.5px; color:var(--ink-faint); margin-top:10px; }
-  .consent{ margin:6px 0 16px; padding:16px 18px; background:var(--bg); border:1px solid var(--line); border-radius:12px; }
-  .consent-title{ margin:0 0 10px; font-weight:600; font-size:14.5px; }
-  .consent-title .req{ color:var(--clay); }
-  .consent-body{ font-size:12.5px; line-height:1.6; color:var(--ink-soft); max-height:190px; overflow-y:auto; padding-right:4px; }
-  .consent-body p{ margin:0 0 6px; }
-  .consent-body ul{ margin:0 0 8px; padding-left:18px; }
-  .consent-warn{ font-weight:600; text-decoration:underline; color:var(--ink); }
-  .consent-check{ display:flex; align-items:center; gap:10px; margin-top:12px; font-size:14.5px; cursor:pointer; }
+  .consent-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:4px 0 14px; }
+  .consent-check{ display:flex; align-items:center; gap:10px; font-size:14.5px; cursor:pointer; }
   .consent-check input{ width:18px; height:18px; accent-color:var(--accent); flex:none; }
+  .form .consent-open{ background:none; border:none; padding:0; font:inherit; font-size:12.5px; color:var(--ink-soft); text-decoration:underline; cursor:pointer; width:auto; margin:0; }
+  .form .consent-open:hover{ color:var(--ink); background:none; }
+  .consent-dialog{ width:min(92vw,400px); padding:22px 22px 18px; border:1px solid var(--line); border-radius:16px; background:var(--bg); color:var(--ink); box-shadow:var(--shadow); font-size:13px; line-height:1.6; }
+  .consent-dialog::backdrop{ background:rgba(20,22,15,.45); }
+  .consent-dialog-title{ margin:0 0 10px; font-weight:700; font-size:15px; }
+  .consent-dialog ul{ margin:0 0 10px; padding-left:18px; color:var(--ink-soft); }
+  .consent-warn{ margin:0 0 14px; font-weight:600; text-decoration:underline; }
+  .form .consent-close{ width:100%; margin:0; padding:11px; font-size:13px; }
 
   /* ---------- FOOTER ---------- */
   footer{ padding:40px 0 60px; }
@@ -553,22 +555,23 @@
         </div>
         <p class="field-hint">※ 계약은 최소 6개월부터, 1년 단위로 연장 가능합니다.</p>
         <div class="field"><label for="f-msg">9. 기타 문의사항</label><textarea id="f-msg" name="message" rows="4" placeholder="궁금하신 점을 자유롭게 적어주세요"></textarea></div>
-        <div class="consent">
-          <p class="consent-title">주의사항 및 개인정보 안내 사항을 확인했습니다. <span class="req">*</span></p>
-          <div class="consent-body">
-            <p><b>개인정보 수집 및 이용에 대한 안내</b></p>
-            <ul>
-              <li>개인정보 수집주체 : Urban Nature 쉐어하우스</li>
-              <li>개인정보 수집항목 : 이름, 연락처, 국적, 나이, 직업군, 문의지점, 입주희망일, 입주기간, 기타 문의사항</li>
-              <li>개인정보 수집 및 이용목적 : 입주 신청자 상담 및 입주 안내 연락 등</li>
-              <li>개인정보 보유 및 이용기간 : 수집일로부터 1년 (고객 동의 철회 시 지체없이 파기)</li>
-              <li>개인정보 취급 위탁을 받는 자 : Google LLC (Google 스프레드시트)</li>
-              <li>개인정보 취급 위탁을 하는 업무의 내용 : 고객정보 저장 및 서버관리</li>
-            </ul>
-            <p class="consent-warn">*상기 동의를 거부할 권리가 있으나, 수집 및 이용에 동의하지 않을 경우 입주 신청 접수 및 안내가 불가능합니다.*</p>
-          </div>
-          <label class="consent-check"><input type="checkbox" name="consent" value="동의" checked required> 네 확인했습니다. 동의합니다.</label>
+        <div class="consent-row">
+          <label class="consent-check"><input type="checkbox" name="consent" value="동의" checked required> 동의합니다</label>
+          <button type="button" class="consent-open" id="consent-open">개인정보 수집·이용 안내 보기</button>
         </div>
+        <dialog id="consent-dialog" class="consent-dialog">
+          <p class="consent-dialog-title">개인정보 수집 및 이용에 대한 안내</p>
+          <ul>
+            <li>개인정보 수집주체 : Urban Nature 쉐어하우스</li>
+            <li>개인정보 수집항목 : 이름, 연락처, 국적, 나이, 직업군, 문의지점, 입주희망일, 입주기간, 기타 문의사항</li>
+            <li>개인정보 수집 및 이용목적 : 입주 신청자 상담 및 입주 안내 연락 등</li>
+            <li>개인정보 보유 및 이용기간 : 수집일로부터 1년 (고객 동의 철회 시 지체없이 파기)</li>
+            <li>개인정보 취급 위탁을 받는 자 : Urban Nature 쉐어하우스</li>
+            <li>개인정보 취급 위탁을 하는 업무의 내용 : 고객정보 저장 및 서버관리</li>
+          </ul>
+          <p class="consent-warn">*상기 동의를 거부할 권리가 있으나, 수집 및 이용에 동의하지 않을 경우 입주 신청 접수 및 안내가 불가능합니다.*</p>
+          <button type="button" class="consent-close" id="consent-close">확인</button>
+        </dialog>
         <button type="submit" id="apply-submit">신청서 제출</button>
         <p class="form-note" id="apply-note">※ 제출 시 입주 신청 내역이 저장됩니다.</p>
       </form>
@@ -596,6 +599,11 @@
   // 여기에 Apps Script 웹 앱 배포 URL을 붙여넣으세요.
   // 예: https://script.google.com/macros/s/AKfycb.../exec
   var APPLY_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxdVn3VICdWEtuKBoEvikKi9B58SjP7CfQlqiJ5fum_u2zy2CtwPL_XjzZCLB8hygbx/exec";
+
+  var consentDialog = document.getElementById('consent-dialog');
+  document.getElementById('consent-open').addEventListener('click', function () { consentDialog.showModal(); });
+  document.getElementById('consent-close').addEventListener('click', function () { consentDialog.close(); });
+  consentDialog.addEventListener('click', function (ev) { if (ev.target === consentDialog) consentDialog.close(); });
 
   document.getElementById('apply-form').addEventListener('submit', function (ev) {
     ev.preventDefault();
