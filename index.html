@@ -1,636 +1,802 @@
+<!doctype html>
+<html lang="ko">
+<head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Urban Nature Sharehouse</title>
-<meta name="description" content="성신여대·성균관대·한성대 도보권 셰어하우스, 4개 지점 실시간 공실 현황">
+<meta name="description" content="성신여대, 성균관대, 한성대 도보권 여성 전용 쉐어하우스. 입주 가능일 확인하고 바로 신청하세요.">
+<meta name="theme-color" content="#F2F4EC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Nanum+Gothic+Coding:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;600;700&family=Gowun+Dodum&family=Nanum+Pen+Script&display=swap">
 <style>
   :root{
-    --bg:#f5f2ea;
-    --surface:#ece6d6;
-    --surface-2:#e0d8c1;
-    --ink:#20241c;
-    --ink-soft:#565b48;
-    --ink-faint:#8b8b74;
-    --accent:#3f5b3a;
-    --accent-soft:#8ea37c;
-    --accent-tint:#dbe5cd;
-    --clay:#b6623a;
-    --clay-tint:#f0ddd0;
-    --line:#d7cfb8;
-    --status-open-fg:#1f5c68;
-    --status-open-bg:#d7e9ea;
-    --status-occ-fg:#6b6656;
-    --status-occ-bg:#e6e0cd;
-    --shadow: 0 1px 2px rgba(32,36,28,.06), 0 8px 24px -12px rgba(32,36,28,.18);
+    --ground:#f2f4ec;
+    --paper:#fbfcf7;
+    --mist:#e4eadb;
+    --mist-2:#d6dfca;
+    --sage:#a9bb98;
+    --moss:#62805a;
+    --forest:#2e4636;
+    --ink:#1f2b24;
+    --ink-soft:#56665b;
+    --ink-faint:#8a998e;
+    --line:#d3dbc8;
+    --clay:#c9714b;
+    --clay-tint:#f1d9ca;
+    --glow:#f7e1bf;
+    --sky:#dce8df;
+    --floor:#cbd6bc;
+    --on-forest:#f2f4ec;
+    --chev:#7b8a7f;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#14160f;
-      --surface:#1c1f16;
-      --surface-2:#262a1c;
-      --ink:#eee8d6;
-      --ink-soft:#b7b49c;
-      --ink-faint:#7d7a64;
-      --accent:#93ab80;
-      --accent-soft:#4b5f42;
-      --accent-tint:#28321f;
-      --clay:#d98a5c;
-      --clay-tint:#3a2a20;
-      --line:#33362a;
-      --status-open-fg:#a9dde4;
-      --status-open-bg:#1c3639;
-      --status-occ-fg:#c9c4a8;
-      --status-occ-bg:#33301f;
-      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+      --ground:#131912;
+      --paper:#1b231b;
+      --mist:#222c22;
+      --mist-2:#2b372b;
+      --sage:#6f8a62;
+      --moss:#8aa77c;
+      --forest:#9db98f;
+      --ink:#eef1e6;
+      --ink-soft:#b5c1b0;
+      --ink-faint:#7f8f7d;
+      --line:#2f3b2e;
+      --clay:#e08a64;
+      --clay-tint:#4a3326;
+      --glow:#e8c88e;
+      --sky:#1e2e2a;
+      --floor:#273223;
+      --on-forest:#131912;
+      --chev:#9aa898;
     }
   }
   :root[data-theme="dark"]{
-    --bg:#14160f;
-    --surface:#1c1f16;
-    --surface-2:#262a1c;
-    --ink:#eee8d6;
-    --ink-soft:#b7b49c;
-    --ink-faint:#7d7a64;
-    --accent:#93ab80;
-    --accent-soft:#4b5f42;
-    --accent-tint:#28321f;
-    --clay:#d98a5c;
-    --clay-tint:#3a2a20;
-    --line:#33362a;
-    --status-open-fg:#a9dde4;
-    --status-open-bg:#1c3639;
-    --status-occ-fg:#c9c4a8;
-    --status-occ-bg:#33301f;
-    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    --ground:#131912; --paper:#1b231b; --mist:#222c22; --mist-2:#2b372b; --sage:#6f8a62; --moss:#8aa77c;
+    --forest:#9db98f; --ink:#eef1e6; --ink-soft:#b5c1b0; --ink-faint:#7f8f7d; --line:#2f3b2e;
+    --clay:#e08a64; --clay-tint:#4a3326; --glow:#e8c88e; --sky:#1e2e2a; --floor:#273223;
+    --on-forest:#131912; --chev:#9aa898;
   }
 
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; scroll-padding-top:84px; }
   body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'IBM Plex Sans KR', 'Pretendard', sans-serif;
-    font-size:16px;
-    line-height:1.7;
-    -webkit-font-smoothing:antialiased;
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:'Gowun Dodum','Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    font-size:17px; line-height:1.75; word-break:keep-all; overflow-wrap:break-word;
+    -webkit-font-smoothing:antialiased; font-synthesis:none;
   }
-  .mono{font-family:'IBM Plex Mono','Nanum Gothic Coding', ui-monospace, monospace;}
-  h1,h2,h3{
-    font-family:'Gowun Batang', 'Nanum Myeongjo', serif;
-    font-weight:700;
-    letter-spacing:-.01em;
-    text-wrap:balance;
-    margin:0;
-    color:var(--ink);
+  h1,h2,h3,.display{
+    font-family:'Hahmlet','Nanum Myeongjo',serif; font-weight:500; margin:0; color:var(--ink);
+    letter-spacing:-.025em; line-height:1.2; text-wrap:balance;
   }
-  a{color:inherit;}
-  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
-  img{max-width:100%;}
+  p{ margin:0; }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+  :focus-visible{ outline:2px solid var(--forest); outline-offset:3px; border-radius:6px; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+  .hand{ font-family:'Nanum Pen Script','Gowun Dodum',cursive; }
+  .sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
 
   /* ---------- NAV ---------- */
-  .nav{
-    position:sticky; top:0; z-index:40;
-    background:color-mix(in srgb, var(--bg) 88%, transparent);
-    backdrop-filter: blur(8px);
-    border-bottom:1px solid var(--line);
-  }
-  .nav-inner{
-    max-width:1120px; margin:0 auto; padding:14px 28px;
-    display:flex; align-items:center; justify-content:space-between; gap:24px;
-  }
-  .brandmark{display:flex; align-items:center; gap:10px; text-decoration:none;}
-  .brandmark svg{width:30px;height:30px;flex:none;}
-  .brandmark span{
-    font-family:'Gowun Batang', serif;
-    font-weight:700; font-size:19px; letter-spacing:0;
-    color:var(--ink);
-  }
-  .nav-links{display:flex; gap:6px; align-items:center;}
-  .nav-links a{
-    font-family:'IBM Plex Mono','Nanum Gothic Coding', monospace; font-size:12.5px; letter-spacing:.04em;
-    text-decoration:none; color:var(--ink-soft);
-    padding:8px 12px; border-radius:999px;
-    transition:background .15s ease, color .15s ease;
-    white-space:nowrap;
-  }
-  .nav-links a:hover, .nav-links a:focus-visible{ background:var(--surface-2); color:var(--ink); outline:none;}
-  .nav-cta{
-    font-family:'IBM Plex Mono','Nanum Gothic Coding', monospace !important; font-size:12.5px;
-    background:var(--accent) !important; color:var(--bg) !important;
-    padding:9px 16px !important; border-radius:999px;
-  }
-  .nav-cta:hover{ background:var(--ink) !important; }
+  .nav{ position:sticky; top:0; z-index:50; background:color-mix(in srgb, var(--ground) 86%, transparent); backdrop-filter:blur(10px); }
+  .nav-inner{ max-width:1180px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+  .brand svg{ width:30px; height:30px; flex:none; }
+  .brand b{ font-family:'Hahmlet',serif; font-weight:600; font-size:19px; letter-spacing:-.01em; }
+  .nav-links{ display:flex; align-items:center; gap:6px; }
+  .nav-links a{ text-decoration:none; font-size:15px; color:var(--ink-soft); padding:8px 14px; border-radius:999px; transition:background .15s, color .15s; }
+  .nav-links a:hover{ background:var(--mist); color:var(--ink); }
+  .nav-links .nav-cta{ background:var(--forest); color:var(--on-forest); margin-left:6px; }
+  .nav-links .nav-cta:hover{ background:var(--ink); color:var(--ground); }
 
   /* ---------- HERO ---------- */
-  .hero{ position:relative; overflow:hidden; border-bottom:1px solid var(--line); }
-  .hero-inner{
-    max-width:1120px; margin:0 auto; padding:56px 28px 0;
-    display:grid; grid-template-columns:.8fr 1.3fr .8fr; gap:28px; align-items:center;
-    position:relative;
-  }
-  .eyebrow{
-    font-family:'IBM Plex Mono','Nanum Gothic Coding', monospace; font-size:12.5px; letter-spacing:.12em;
-    color:var(--accent); text-transform:uppercase; margin:0 0 14px;
-    display:flex; align-items:center; gap:10px;
-  }
-  .eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);display:inline-block;}
-  .hero-center{ display:flex; flex-direction:column; align-items:center; text-align:center; }
-  .hero-center .eyebrow{ justify-content:center; }
-  .hero-center .eyebrow::before{ display:none; }
-  .hero h1{ font-size:clamp(34px, 4.6vw, 52px); line-height:1.12; }
-  .hero h1 em{ font-style:normal; color:var(--accent); }
-  .hero-sub{
-    margin:18px 0 16px; max-width:42ch; color:var(--ink-soft);
-    font-size:16.5px;
-  }
-  .contact-line{
-    font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:12.5px; color:var(--ink-faint);
-    display:flex; align-items:center; gap:10px; margin-bottom:26px;
-  }
-  .hero-actions{display:flex; gap:12px; flex-wrap:wrap; justify-content:center;}
-  .btn{
-    font-family:'IBM Plex Mono','Nanum Gothic Coding', monospace; font-size:13px; letter-spacing:.03em;
-    text-decoration:none; padding:13px 22px; border-radius:12px;
-    display:inline-flex; align-items:center; gap:8px;
-    border:1px solid transparent;
-  }
-  .btn-primary{ background:var(--accent); color:var(--bg); }
-  .btn-primary:hover{ background:var(--ink); }
-  .btn-ghost{ border-color:var(--ink); color:var(--ink); }
-  .btn-ghost:hover{ background:var(--surface-2); }
+  .hero{ position:relative; overflow:hidden; }
+  .hero-grid{ max-width:1180px; margin:0 auto; padding:34px 28px 64px; display:grid; grid-template-columns:1.08fr .92fr; gap:48px; align-items:center; }
+  .hero h1{ font-size:clamp(42px, 6vw, 80px); line-height:1.1; font-weight:600; letter-spacing:-.04em; }
+  .hero-sub{ margin-top:26px; max-width:30em; font-size:18.5px; color:var(--ink-soft); }
+  .hero-actions{ margin-top:34px; display:flex; flex-wrap:wrap; gap:12px; }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; font-size:16px; padding:14px 26px; border-radius:999px; border:1.5px solid transparent; cursor:pointer; transition:transform .15s, background .15s, color .15s; }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-solid{ background:var(--forest); color:var(--on-forest); }
+  .btn-solid:hover{ background:var(--ink); color:var(--ground); }
+  .btn-line{ border-color:var(--forest); color:var(--forest); background:transparent; }
+  .btn-line:hover{ background:var(--mist); }
+  .hero-contact{ margin-top:22px; font-size:15.5px; color:var(--ink-soft); }
+  .hero-contact a{ text-decoration:none; border-bottom:1px solid var(--line); }
+  .hero-contact span{ color:var(--ink-faint); margin:0 6px; }
+  .next-room{ margin-top:34px; display:inline-flex; align-items:center; gap:12px; padding:12px 20px 12px 14px; border-radius:18px; background:var(--clay-tint); text-decoration:none; font-size:15.5px; }
+  .next-room i{ width:10px; height:10px; border-radius:50%; background:var(--clay); flex:none; box-shadow:0 0 0 5px color-mix(in srgb, var(--clay) 22%, transparent); }
+  .next-room b{ font-weight:400; color:var(--ink); }
 
-  .hero-stats{ display:flex; gap:28px; margin-top:28px; justify-content:center; }
-  .stat b{
-    display:block; font-family:'Big Shoulders Display',sans-serif; font-weight:800;
-    font-size:30px; color:var(--ink); font-variant-numeric:tabular-nums; line-height:1;
+  .art{ position:relative; width:100%; max-width:470px; justify-self:end; }
+  .art > svg{ display:block; width:100%; height:auto; }
+  .glow{ animation:glow-in 1.6s ease-out .1s backwards; }
+  @keyframes glow-in{ from{ opacity:0; } }
+  .sticker{
+    position:absolute; font-family:'Nanum Pen Script','Gowun Dodum',cursive; font-size:25px; line-height:1.15; color:var(--ink);
+    background:var(--paper); padding:7px 14px 8px; border:1px solid var(--line); border-radius:4px;
+    transform:rotate(var(--r,-3deg)); white-space:nowrap;
+    animation:stick .5s cubic-bezier(.3,1.4,.5,1) backwards;
   }
-  .stat span{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:11px; color:var(--ink-faint); letter-spacing:.03em; }
+  .sticker::before{ content:""; position:absolute; top:-9px; left:50%; width:44px; height:16px; transform:translateX(-50%) rotate(-2deg); background:var(--clay-tint); opacity:.9; }
+  .sticker.s1{ left:-6%; top:30%; --r:-4deg; animation-delay:.9s; }
+  .sticker.s2{ right:-3%; top:58%; --r:3deg; animation-delay:1.1s; }
+  .sticker.s3{ left:2%; bottom:5%; --r:-2deg; animation-delay:1.3s; }
+  @keyframes stick{ from{ opacity:0; transform:rotate(var(--r)) scale(.85); } }
+  .art-note{ margin-top:12px; font-size:13px; color:var(--ink-faint); text-align:right; }
 
-  .hero-media{ position:relative; aspect-ratio:3/4; border-radius:20px; overflow:hidden; background:var(--surface); border:1px solid var(--line); }
-  .hero-media svg{ width:100%; height:100%; display:block; }
-  .corner-badge{
-    position:absolute; left:-18px; bottom:-18px; width:58px; height:58px; border-radius:50%;
-    background:var(--bg); border:1px solid var(--line); box-shadow:var(--shadow);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .corner-badge svg{ width:26px; height:26px; }
+  .lang-note{ text-align:center; font-size:13.5px; color:var(--ink-faint); padding:14px 20px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
 
-  .pill-nav{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; padding:34px 28px 44px; }
-  .pill-nav-item{
-    font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:12.5px;
-    padding:9px 18px; border-radius:999px; border:1px solid var(--line);
-    text-decoration:none; color:var(--ink-soft); background:var(--bg);
-  }
-  .pill-nav-item:hover{ border-color:var(--accent); color:var(--ink); }
-  .pill-nav-item.active{ background:var(--accent); border-color:var(--accent); color:var(--bg); }
+  /* ---------- WHY (forest band) ---------- */
+  .why{ background:var(--forest); color:var(--on-forest); border-radius:44px 44px 0 0; margin-top:-1px; position:relative; }
+  .why-grid{ max-width:1180px; margin:0 auto; padding:96px 28px 104px; display:grid; grid-template-columns:5fr 7fr; gap:64px; }
+  .why h2{ color:var(--on-forest); font-size:clamp(34px, 4.4vw, 56px); font-weight:600; position:sticky; top:110px; align-self:start; }
+  .why-list{ list-style:none; margin:0; padding:0; }
+  .why-list li{ display:grid; grid-template-columns:44px 1fr; gap:18px; padding:28px 0; border-top:1px solid color-mix(in srgb, var(--on-forest) 22%, transparent); }
+  .why-list li:first-child{ border-top:none; padding-top:6px; }
+  .why-list svg{ width:36px; height:36px; margin-top:4px; }
+  .why-list h3{ color:var(--on-forest); font-size:24px; font-weight:500; margin-bottom:6px; }
+  .why-list p{ color:color-mix(in srgb, var(--on-forest) 78%, transparent); max-width:34em; }
 
-  .lang-note{
-    text-align:center; font-size:12.5px; color:var(--ink-faint);
-    background:var(--bg); border-bottom:1px solid var(--line);
-    margin:0; padding:12px 20px;
-  }
+  /* ---------- SECTIONS ---------- */
+  section.block{ padding:104px 0; }
+  .sec-title{ font-size:clamp(32px, 4vw, 50px); font-weight:600; }
+  .sec-sub{ margin-top:14px; max-width:36em; color:var(--ink-soft); }
 
-  /* ---------- BAND (trust bullets) ---------- */
-  .band{ background:var(--surface); border-bottom:1px solid var(--line); }
-  .band-inner{
-    max-width:1120px; margin:0 auto; padding:40px 28px;
-    display:grid; grid-template-columns:repeat(4,1fr); gap:28px;
-  }
-  .band-item{ display:flex; flex-direction:column; gap:8px; }
-  .band-item .n{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:12px; color:var(--accent); }
-  .band-item p{ margin:0; font-size:14.5px; color:var(--ink-soft); line-height:1.5; }
+  /* ---------- BRANCHES ---------- */
+  .branches{ margin-top:56px; display:grid; grid-template-columns:repeat(4,1fr); gap:22px; align-items:start; }
+  .branch:nth-child(even){ margin-top:44px; }
+  .branch-art{ aspect-ratio:4/5; border-radius:999px 999px 24px 24px; overflow:hidden; background:var(--mist); }
+  .branch-art svg{ display:block; width:100%; height:100%; }
+  .branch h3{ margin-top:20px; font-size:25px; font-weight:600; }
+  .branch .area{ margin-top:2px; font-size:14.5px; color:var(--ink-faint); }
+  .branch .desc{ margin-top:10px; font-size:15.5px; color:var(--ink-soft); }
+  .branch .next{ margin-top:14px; display:inline-block; font-size:14.5px; padding:6px 14px; border-radius:999px; background:var(--mist); color:var(--ink); }
+  .branch .next b{ font-weight:400; color:var(--clay); }
+  .caption{ margin-top:54px; font-size:13.5px; color:var(--ink-faint); }
 
-  /* ---------- SECTION HEADERS ---------- */
-  section{ padding:76px 0; border-bottom:1px solid var(--line); }
-  .sec-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:36px; flex-wrap:wrap; }
-  .sec-head h2{ font-size:clamp(28px,3.4vw,40px); }
-  .sec-head p{ margin:8px 0 0; color:var(--ink-soft); max-width:52ch; }
-  .sec-tag{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:12px; letter-spacing:.1em; color:var(--ink-faint); text-transform:uppercase; }
+  /* ---------- VACANCY TIMELINE ---------- */
+  .vacancy{ background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .vac-top{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
+  .seg{ display:inline-flex; padding:4px; background:var(--mist); border-radius:999px; }
+  .seg button{ border:none; background:transparent; font-size:15px; padding:9px 20px; border-radius:999px; cursor:pointer; color:var(--ink-soft); }
+  .seg button[aria-pressed="true"]{ background:var(--forest); color:var(--on-forest); }
+  .vac-meta{ margin-top:30px; display:flex; flex-wrap:wrap; gap:10px 22px; align-items:center; font-size:14.5px; color:var(--ink-soft); }
+  .vac-meta .now{ color:var(--ink); }
+  .legend{ display:inline-flex; align-items:center; gap:8px; }
+  .legend i{ display:inline-block; }
+  .legend .l-bar{ width:26px; height:8px; border-radius:99px; background:var(--sage); opacity:.55; }
+  .legend .l-dot{ width:14px; height:14px; border-radius:50%; background:var(--forest); border:3px solid var(--paper); box-shadow:0 0 0 1px var(--forest); }
 
-  /* ---------- BRANCH CARDS ---------- */
-  .branches{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:20px; overflow:hidden; }
-  .branch{ background:var(--bg); padding:26px 22px; display:flex; flex-direction:column; gap:14px; min-height:230px; }
-  .branch .area{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:11.5px; color:var(--ink-faint); letter-spacing:.04em; }
-  .branch h3{ font-size:24px; line-height:1.05; }
-  .branch .desc{ font-size:14px; color:var(--ink-soft); flex:1; }
-  .branch-foot{ display:flex; align-items:center; justify-content:space-between; padding-top:10px; border-top:1px dashed var(--line); }
-  .branch-foot .avail{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:12px; color:var(--status-open-fg); font-weight:600; }
-  .branch-foot .avail.none{ color:var(--ink-faint); }
-  .branch-foot a{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:11.5px; text-decoration:none; color:var(--ink); border-bottom:1px solid var(--ink); }
+  .tl{ margin-top:30px; }
+  .tl-scroll{ overflow-x:auto; }
+  .tl-inner{ min-width:640px; }
+  .tl-row, .tl-axis{ display:grid; grid-template-columns:150px 1fr 82px; align-items:center; column-gap:16px; }
+  .tl-axis{ padding-bottom:10px; font-size:12.5px; color:var(--ink-faint); }
+  .tl-months{ display:grid; grid-template-columns:repeat(12,1fr); }
+  .tl-months span{ padding-left:6px; border-left:1px solid var(--line); white-space:nowrap; }
+  .tl-list{ list-style:none; margin:0; padding:0; }
+  .tl-group{ margin-top:26px; padding:0 0 8px; font-family:'Hahmlet',serif; font-size:20px; font-weight:600; display:flex; align-items:baseline; gap:10px; }
+  .tl-group small{ font-family:'Gowun Dodum',sans-serif; font-weight:400; font-size:14px; color:var(--ink-faint); }
+  .tl-group:first-child{ margin-top:6px; }
+  .tl-row{ padding:7px 0; border-top:1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+  .tl-row:hover{ background:color-mix(in srgb, var(--mist) 55%, transparent); }
+  .tl-name{ font-size:15.5px; line-height:1.3; }
+  .tl-name small{ display:block; font-size:12.5px; color:var(--ink-faint); }
+  .tl-track{ position:relative; height:26px; background-image:linear-gradient(to right, var(--line) 1px, transparent 1px); background-size:calc(100%/12) 100%; }
+  .tl-bar{ position:absolute; left:0; top:9px; height:8px; border-radius:99px; background:var(--sage); opacity:.55; }
+  .tl-dot{ position:absolute; top:4px; width:18px; height:18px; margin-left:-9px; border-radius:50%; background:var(--forest); border:3.5px solid var(--paper); box-shadow:0 0 0 1px var(--forest); }
+  .tl-row.first .tl-dot{ background:var(--clay); box-shadow:0 0 0 1px var(--clay), 0 0 0 7px color-mix(in srgb, var(--clay) 22%, transparent); }
+  .tl-row.first .tl-bar{ background:var(--clay); opacity:.35; }
+  .tl-row.open .tl-dot{ left:0 !important; margin-left:0; background:var(--clay); }
+  .tl-more{ padding:22px 0 4px; text-align:center; border-top:1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+  .tl-more button{ border:1.5px solid var(--forest); background:transparent; color:var(--forest); font-size:15px; padding:11px 24px; border-radius:999px; cursor:pointer; }
+  .tl-more button:hover{ background:var(--forest); color:var(--on-forest); }
+  .tl-date{ font-variant-numeric:tabular-nums; font-size:15px; text-align:right; }
+  .tl-date em{ display:block; font-style:normal; font-size:11.5px; color:var(--clay); line-height:1.2; }
 
-  /* ---------- VACANCY TABLE ---------- */
-  .updated{
-    font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:12px; color:var(--ink-faint);
-    display:inline-flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line);
-    padding:6px 12px; border-radius:999px; margin-bottom:22px;
-  }
-  .updated .dot{width:6px;height:6px;border-radius:50%;background:var(--status-open-fg);}
-  .table-scroll{ overflow-x:auto; border:1px solid var(--line); border-radius:20px; }
-  table{ width:100%; border-collapse:collapse; min-width:640px; background:var(--bg); }
-  thead th{
-    text-align:left; font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:11.5px; letter-spacing:.06em;
-    text-transform:uppercase; color:var(--ink-faint); font-weight:500;
-    padding:14px 18px; background:var(--surface); border-bottom:1px solid var(--line);
-    position:sticky; top:0;
-  }
-  tbody td{ padding:13px 18px; border-bottom:1px solid var(--line); font-size:14.5px; }
-  tbody tr:last-child td{ border-bottom:none; }
-  tbody tr:hover{ background:var(--surface); }
-  td.branch-cell{ font-family:'Gowun Batang',serif; font-weight:700; font-size:15px; }
-  td.mono-cell{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-variant-numeric:tabular-nums; font-size:13.5px; color:var(--ink-soft); }
-  .pill{
-    font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:11.5px; padding:5px 11px; border-radius:999px;
-    display:inline-block; font-weight:600; letter-spacing:.02em;
-  }
-  .pill.open{ background:var(--status-open-bg); color:var(--status-open-fg); }
-  .pill.occ{ background:var(--status-occ-bg); color:var(--status-occ-fg); }
+  /* ---------- APPLY ---------- */
+  .apply{ background:var(--mist); }
+  .apply-grid{ display:grid; grid-template-columns:5fr 7fr; gap:64px; align-items:start; }
+  .apply h2{ font-size:clamp(32px, 4vw, 50px); font-weight:600; }
+  .apply .sec-sub{ margin-bottom:34px; }
+  .reach{ list-style:none; margin:0; padding:0; border-top:1px solid color-mix(in srgb, var(--forest) 24%, transparent); }
+  .reach li{ display:flex; justify-content:space-between; align-items:center; gap:14px; padding:16px 0; border-bottom:1px solid color-mix(in srgb, var(--forest) 24%, transparent); }
+  .reach .k{ font-size:14.5px; color:var(--ink-soft); }
+  .reach .v{ font-family:'Hahmlet',serif; font-size:19px; font-weight:500; text-decoration:none; }
+  .reach .copy{ border:1px solid var(--forest); background:transparent; color:var(--forest); border-radius:999px; font-size:13px; padding:4px 12px; cursor:pointer; margin-left:10px; }
+  .reach .copy:hover{ background:var(--forest); color:var(--on-forest); }
 
-  /* ---------- CONTACT ---------- */
-  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
-  .contact-copy h2{ font-size:clamp(28px,3.4vw,40px); margin-bottom:18px; }
-  .contact-copy p{ color:var(--ink-soft); max-width:44ch; }
-  .contact-card{
-    background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:22px 24px;
-    margin-top:26px; display:flex; flex-direction:column; gap:14px;
-  }
-  .contact-row{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; font-size:14.5px; }
-  .contact-row .k{ color:var(--ink-faint); font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:12px; }
-  .contact-row .v{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; color:var(--ink); }
-  .placeholder{ color:var(--clay); }
-
-  .form{ background:var(--surface-2); border:1px solid var(--line); border-radius:20px; padding:28px; }
-  .form-title{ font-size:12px; letter-spacing:.1em; color:var(--accent); text-transform:uppercase; margin:0 0 18px; }
-  .field-hint{ font-size:12.5px; color:var(--ink-faint); margin:-8px 0 16px; }
-  .field{ display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
-  .field label{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:11.5px; letter-spacing:.04em; color:var(--ink-faint); text-transform:uppercase; }
+  .apply-grid > div:first-child{ position:sticky; top:110px; }
+  .apply-doodle{ margin-top:34px; display:flex; align-items:flex-end; gap:14px; }
+  .apply-doodle .hand{ font-size:27px; line-height:1.2; color:var(--ink-soft); transform:rotate(-3deg); padding-bottom:16px; }
+  .form{ background:var(--paper); border-radius:32px; padding:36px; }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .field{ display:flex; flex-direction:column; gap:7px; margin-bottom:18px; }
+  .field label{ font-size:14.5px; color:var(--ink-soft); }
   .field input, .field select, .field textarea{
-    font-family:'IBM Plex Sans KR', sans-serif; font-size:15px; color:var(--ink);
-    background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:11px 13px;
-    outline:none;
+    font-family:inherit; font-size:16px; color:var(--ink); background:var(--ground);
+    border:1.5px solid transparent; border-radius:16px; padding:13px 16px; outline:none; width:100%;
+    transition:border-color .15s, background .15s;
   }
-  .field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--accent); }
-  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  .form button{
-    width:100%; font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:13.5px; letter-spacing:.03em;
-    background:var(--accent); color:var(--bg); border:none; padding:14px; border-radius:12px; cursor:pointer;
-    margin-top:6px;
-  }
-  .form button:hover{ background:var(--ink); }
-  .form-note{ font-size:12.5px; color:var(--ink-faint); margin-top:10px; }
-  .consent-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:4px 0 14px; }
-  .consent-check{ display:flex; align-items:center; gap:10px; font-size:14.5px; cursor:pointer; }
-  .consent-check input{ width:18px; height:18px; accent-color:var(--accent); flex:none; }
-  .form .consent-open{ background:none; border:none; padding:0; font:inherit; font-size:12.5px; color:var(--ink-soft); text-decoration:underline; cursor:pointer; width:auto; margin:0; }
-  .form .consent-open:hover{ color:var(--ink); background:none; }
-  .consent-dialog{ width:min(92vw,400px); padding:22px 22px 18px; border:1px solid var(--line); border-radius:16px; background:var(--bg); color:var(--ink); box-shadow:var(--shadow); font-size:13px; line-height:1.6; }
-  .consent-dialog::backdrop{ background:rgba(20,22,15,.45); }
-  .consent-dialog-title{ margin:0 0 10px; font-weight:700; font-size:15px; }
-  .consent-dialog ul{ margin:0 0 10px; padding-left:18px; color:var(--ink-soft); }
-  .consent-warn{ margin:0 0 14px; font-weight:600; text-decoration:underline; }
-  .form .consent-close{ width:100%; margin:0; padding:11px; font-size:13px; }
+  .field select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1.5l6 6 6-6' fill='none' stroke='%237b8a7f' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 16px center; padding-right:40px; }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--forest); background:var(--paper); }
+  .field textarea{ resize:vertical; min-height:110px; }
+  .field-hint{ font-size:13.5px; color:var(--ink-faint); margin:-6px 0 18px; }
+  .consent-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:6px 0 18px; padding-top:18px; border-top:1px dashed var(--line); }
+  .consent-check{ display:flex; align-items:center; gap:10px; font-size:16px; cursor:pointer; }
+  .consent-check input{ width:20px; height:20px; accent-color:var(--forest); flex:none; }
+  .form .consent-open{ background:none; border:none; padding:0; font:inherit; font-size:14px; color:var(--ink-soft); text-decoration:underline; cursor:pointer; }
+  .form .consent-open:hover{ color:var(--ink); }
+  .form button[type="submit"]{ width:100%; border:none; border-radius:999px; background:var(--forest); color:var(--on-forest); font-size:17px; padding:16px; cursor:pointer; transition:background .15s, transform .15s; }
+  .form button[type="submit"]:hover{ background:var(--ink); color:var(--ground); transform:translateY(-1px); }
+  .form button[type="submit"]:disabled{ opacity:.6; cursor:default; transform:none; }
+  .form-note{ margin-top:14px; font-size:14px; color:var(--ink-faint); text-align:center; }
+
+  .consent-dialog{ width:min(92vw,420px); padding:26px 26px 20px; border:none; border-radius:24px; background:var(--paper); color:var(--ink); box-shadow:0 24px 60px -20px rgba(20,30,20,.45); font-size:14px; line-height:1.65; }
+  .consent-dialog::backdrop{ background:rgba(20,28,20,.5); }
+  .consent-dialog-title{ font-family:'Hahmlet',serif; font-weight:600; font-size:18px; margin-bottom:12px; }
+  .consent-dialog ul{ margin:0 0 12px; padding-left:18px; color:var(--ink-soft); }
+  .consent-warn{ margin-bottom:16px; font-weight:400; text-decoration:underline; text-underline-offset:3px; }
+  .consent-close{ width:100%; border:none; border-radius:999px; background:var(--forest); color:var(--on-forest); font-size:15px; padding:12px; cursor:pointer; }
 
   /* ---------- FOOTER ---------- */
-  footer{ padding:40px 0 60px; }
-  .foot-inner{ display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap; }
-  .foot-legal{ font-family:'IBM Plex Mono','Nanum Gothic Coding',monospace; font-size:11.5px; color:var(--ink-faint); line-height:1.8; }
+  footer{ padding:56px 0 72px; }
+  .foot{ display:flex; justify-content:space-between; align-items:flex-end; gap:28px; flex-wrap:wrap; }
+  .foot-legal{ font-size:13.5px; color:var(--ink-faint); line-height:1.9; }
+  .ph{ color:var(--clay); }
 
-  @media (max-width: 880px){
-    .hero-inner{ grid-template-columns:1fr; padding-top:40px; }
-    .hero-media{ display:none; }
-    .pill-nav{ padding-top:24px; }
-    .band-inner{ grid-template-columns:1fr 1fr; }
-    .branches{ grid-template-columns:1fr 1fr; }
-    .contact-grid{ grid-template-columns:1fr; }
-    .form-row{ grid-template-columns:1fr; }
+  @media (max-width:920px){
+    body{ font-size:16.5px; }
     .nav-links a:not(.nav-cta){ display:none; }
+    .hero-grid{ grid-template-columns:1fr; gap:34px; padding-top:18px; padding-bottom:48px; }
+    .art{ justify-self:center; max-width:360px; }
+    .sticker{ font-size:22px; }
+    .why{ border-radius:30px 30px 0 0; }
+    .why-grid{ grid-template-columns:1fr; gap:34px; padding:68px 22px 76px; }
+    .why h2{ position:static; }
+    section.block{ padding:72px 0; }
+    .branches{ grid-template-columns:1fr 1fr; gap:34px 18px; }
+    .branch:nth-child(even){ margin-top:0; }
+    .apply-grid{ grid-template-columns:1fr; gap:40px; }
+    .apply-grid > div:first-child{ position:static; }
+    .form{ padding:26px 20px; }
+    .form-row{ grid-template-columns:1fr; gap:0; }
+    .wrap, .nav-inner, .hero-grid{ padding-left:20px; padding-right:20px; }
+    .tl-row, .tl-axis{ grid-template-columns:96px 1fr 74px; column-gap:12px; }
+    .tl-inner{ min-width:560px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .glow, .sticker{ animation:none; }
+    .btn, .form button[type="submit"]{ transition:none; }
   }
 </style>
+</head>
+<body>
 
-<nav class="nav">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="plant" viewBox="0 0 100 140">
+      <path d="M50 98C50 62 46 38 40 16" stroke="var(--moss)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M50 98C52 68 62 46 78 32" stroke="var(--moss)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M50 98C48 76 34 64 18 60" stroke="var(--moss)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="38" cy="24" rx="12" ry="22" transform="rotate(-18 38 24)" fill="var(--moss)"/>
+      <ellipse cx="80" cy="36" rx="10" ry="20" transform="rotate(38 80 36)" fill="var(--sage)"/>
+      <ellipse cx="18" cy="62" rx="10" ry="18" transform="rotate(-70 18 62)" fill="var(--forest)"/>
+      <rect x="22" y="92" width="56" height="10" rx="4" fill="var(--clay)"/>
+      <path d="M27 102h46l-5 36H32z" fill="var(--clay)"/>
+    </symbol>
+    <radialGradient id="glowg">
+      <stop offset="0" stop-color="var(--glow)" stop-opacity=".95"/>
+      <stop offset="1" stop-color="var(--glow)" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="archHero"><path d="M0 640V240a240 240 0 0 1 480 0V640z"/></clipPath>
+    <clipPath id="archCard"><path d="M0 300V120a120 120 0 0 1 240 0V300z"/></clipPath>
+  </defs>
+</svg>
+
+<nav class="nav" aria-label="주요 메뉴">
   <div class="nav-inner">
-    <a class="brandmark" href="#top">
-      <svg viewBox="0 0 32 32" fill="none">
+    <a class="brand" href="#top" aria-label="Urban Nature Sharehouse 처음으로">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
         <rect x="4" y="10" width="13" height="18" stroke="var(--ink)" stroke-width="1.4"/>
         <line x1="7" y1="14" x2="7" y2="17" stroke="var(--ink)" stroke-width="1.2"/>
         <line x1="11" y1="14" x2="11" y2="17" stroke="var(--ink)" stroke-width="1.2"/>
         <line x1="7" y1="20" x2="7" y2="23" stroke="var(--ink)" stroke-width="1.2"/>
         <line x1="11" y1="20" x2="11" y2="23" stroke="var(--ink)" stroke-width="1.2"/>
-        <path d="M17 28C17 28 15 18 22 13C27.5 9 29 4 29 4" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"/>
-        <path d="M22 13C22 13 18 12.5 17.5 8.5" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/>
-        <path d="M25.5 9.5C25.5 9.5 21.5 10 19.5 15.5" stroke="var(--accent)" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M17 28C17 28 15 18 22 13C27.5 9 29 4 29 4" stroke="var(--moss)" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M22 13C22 13 18 12.5 17.5 8.5" stroke="var(--moss)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M25.5 9.5C25.5 9.5 21.5 10 19.5 15.5" stroke="var(--moss)" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
-      <span>URBAN NATURE</span>
+      <b>Urban Nature</b>
     </a>
     <div class="nav-links">
-      <a href="#branches">지점안내</a>
-      <a href="#vacancy">공실현황</a>
-      <a href="#contact">입주문의</a>
-      <a href="#contact" class="nav-cta">문의하기</a>
+      <a href="#why">좋은 점</a>
+      <a href="#branches">지점</a>
+      <a href="#vacancy">입주 가능일</a>
+      <a href="#apply" class="nav-cta">입주 신청</a>
     </div>
   </div>
 </nav>
 
 <header class="hero" id="top">
-  <div class="hero-inner">
-    <div class="hero-media" aria-hidden="true">
-      <svg viewBox="0 0 300 400">
-        <rect width="300" height="400" fill="var(--surface)"/>
-        <line x1="0" y1="300" x2="300" y2="300" stroke="var(--line)" stroke-width="1"/>
-        <line x1="40" y1="0" x2="40" y2="300" stroke="var(--line)" stroke-width="1"/>
-        <g fill="var(--surface-2)" stroke="var(--line)" stroke-width="1">
-          <path d="M150 110 L210 150 L90 150 Z"/>
-          <rect x="146" y="150" width="8" height="46"/>
-        </g>
-        <circle cx="150" cy="205" r="4" fill="var(--clay)"/>
-        <g fill="var(--surface-2)" stroke="var(--line)" stroke-width="1">
-          <rect x="70" y="230" width="120" height="70" rx="16"/>
-          <rect x="60" y="270" width="18" height="34" rx="6"/>
-          <rect x="192" y="270" width="18" height="34" rx="6"/>
-        </g>
-        <rect x="96" y="245" width="68" height="18" rx="9" fill="var(--clay-tint)"/>
-        <g>
-          <rect x="216" y="256" width="30" height="44" rx="4" fill="var(--surface-2)" stroke="var(--line)"/>
-          <path d="M231 256C231 256 218 236 231 214C244 236 231 256 231 256Z" fill="var(--accent)"/>
-          <path d="M231 232C231 232 222 224 226 212" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round"/>
-        </g>
-      </svg>
-    </div>
-
-    <div class="hero-center">
-      <p class="eyebrow eyebrow-center">성신여대 · 성균관대 · 한성대 도보권</p>
-      <h1>도심 속에서<br>지내는<br><em>자연스러운</em> 자취</h1>
-      <p class="hero-sub">Urban Nature Sharehouse는 서울 3개 대학가에서 운영하는 여성 전용 셰어하우스로, 4개 지점을 운영하고 있습니다. 통학 부담 없는 위치, 투명한 공과금 정산, 매주 관리되는 공용공간까지 — 자취를 처음 시작하는 분들을 위해 코지하게 꾸몄습니다.</p>
-      <p class="contact-line"><span>010-8676-5732</span><span>·</span><span>카카오톡 isimas</span></p>
+  <div class="hero-grid">
+    <div>
+      <h1>도시 한가운데의<br>작은 숲</h1>
+      <p class="hero-sub">성신여대, 성균관대, 한성대 도보권에서 운영하는 여성 전용 쉐어하우스예요. 아늑하게 꾸민 개인실과 매주 청소하는 공용공간에서 자취를 시작해 보세요.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#vacancy">공실 현황 보기</a>
-        <a class="btn btn-ghost" href="#contact">입주 문의하기</a>
+        <a class="btn btn-solid" href="#vacancy">입주 가능한 방 보기</a>
+        <a class="btn btn-line" href="#apply">입주 신청서 쓰기</a>
       </div>
-      <div class="hero-stats">
-        <div class="stat"><b>4</b><span>운영 지점</span></div>
-        <div class="stat"><b>24</b><span>전체 객실·베드</span></div>
-        <div class="stat"><b>10/6</b><span>최단 입주가능</span></div>
-      </div>
+      <p class="hero-contact">전화 <a href="tel:01086765732">010-8676-5732</a><span>/</span>카카오톡 <b style="font-weight:400">isimas</b></p>
+      <a class="next-room" href="#vacancy" id="next-room" hidden><i></i><span id="next-room-text"></span></a>
     </div>
 
-    <div class="hero-media" aria-hidden="true">
-      <svg viewBox="0 0 300 400">
-        <rect width="300" height="400" fill="var(--surface)"/>
-        <line x1="0" y1="270" x2="300" y2="270" stroke="var(--line)" stroke-width="1"/>
-        <g stroke="var(--line)" stroke-width="1">
-          <rect x="86" y="196" width="98" height="74" fill="var(--surface-2)"/>
-          <rect x="98" y="182" width="86" height="14" fill="var(--surface-2)"/>
-          <rect x="108" y="168" width="74" height="14" fill="var(--accent-tint)"/>
-        </g>
-        <g fill="none" stroke="var(--clay)" stroke-width="2">
-          <path d="M204 270 L204 190 Q204 176 216 176 L226 176"/>
-        </g>
-        <ellipse cx="212" cy="176" rx="18" ry="10" fill="var(--clay-tint)" stroke="var(--clay)" stroke-width="1"/>
-        <g>
-          <path d="M70 270C70 270 62 236 78 208C94 236 70 270 70 270Z" fill="var(--accent)"/>
-          <path d="M70 232C70 232 58 222 62 206" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <rect x="58" y="270" width="24" height="14" rx="3" fill="var(--surface-2)" stroke="var(--line)"/>
-        </g>
-      </svg>
-      <div class="corner-badge">
-        <svg viewBox="0 0 32 32" fill="none">
-          <rect x="4" y="10" width="13" height="18" stroke="var(--ink)" stroke-width="1.4"/>
-          <path d="M17 28C17 28 15 18 22 13C27.5 9 29 4 29 4" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"/>
+    <div>
+      <div class="art" aria-hidden="true">
+        <svg viewBox="0 0 480 640">
+          <g clip-path="url(#archHero)">
+            <rect width="480" height="640" fill="var(--mist)"/>
+            <rect y="500" width="480" height="140" fill="var(--floor)"/>
+            <rect y="497" width="480" height="5" fill="var(--mist-2)"/>
+            <!-- window -->
+            <path d="M70 430V250a85 85 0 0 1 170 0V430z" fill="var(--sky)"/>
+            <circle cx="196" cy="226" r="17" fill="var(--clay-tint)"/>
+            <path d="M70 392C110 352 150 366 188 340C214 324 228 332 240 338V430H70z" fill="var(--sage)" opacity=".55"/>
+            <rect x="106" y="330" width="4" height="100" fill="var(--forest)"/>
+            <circle cx="108" cy="318" r="34" fill="var(--moss)"/>
+            <circle cx="132" cy="338" r="22" fill="var(--sage)"/>
+            <rect x="196" y="364" width="4" height="66" fill="var(--forest)"/>
+            <circle cx="198" cy="356" r="24" fill="var(--moss)"/>
+            <path d="M70 430V250a85 85 0 0 1 170 0V430z" fill="none" stroke="var(--forest)" stroke-width="6"/>
+            <path d="M155 165V430M70 305H240" stroke="var(--forest)" stroke-width="4"/>
+            <rect x="60" y="432" width="190" height="10" rx="3" fill="var(--forest)"/>
+            <!-- curtains -->
+            <path d="M50 150H262" stroke="var(--forest)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M56 154C64 240 52 330 62 440H98C92 340 100 250 90 154z" fill="var(--paper)" opacity=".75"/>
+            <path d="M256 154C248 240 260 330 250 440H214C220 340 212 250 222 154z" fill="var(--paper)" opacity=".75"/>
+            <!-- lamp -->
+            <circle class="glow" cx="330" cy="215" r="150" fill="url(#glowg)"/>
+            <path d="M330 0V152" stroke="var(--forest)" stroke-width="3"/>
+            <path d="M298 198C298 170 314 152 330 152C346 152 362 170 362 198z" fill="var(--forest)"/>
+            <ellipse cx="330" cy="200" rx="12" ry="6" fill="var(--glow)"/>
+            <!-- print + shelf -->
+            <rect x="386" y="262" width="68" height="88" rx="4" fill="var(--paper)" stroke="var(--forest)" stroke-width="4"/>
+            <path d="M400 336V306a20 20 0 0 1 40 0V336z" fill="var(--sage)"/>
+            <circle cx="430" cy="284" r="8" fill="var(--clay)"/>
+            <rect x="268" y="322" width="96" height="6" rx="2" fill="var(--forest)"/>
+            <rect x="274" y="286" width="12" height="36" rx="2" fill="var(--forest)"/>
+            <rect x="288" y="296" width="10" height="26" rx="2" fill="var(--clay)"/>
+            <rect x="300" y="282" width="12" height="40" rx="2" fill="var(--moss)"/>
+            <rect x="334" y="304" width="22" height="18" rx="4" fill="var(--paper)"/>
+            <path d="M356 309a6 6 0 0 1 0 10" stroke="var(--paper)" stroke-width="3" fill="none"/>
+            <!-- bed -->
+            <rect x="262" y="372" width="230" height="150" rx="26" fill="var(--sage)"/>
+            <rect x="262" y="438" width="230" height="104" rx="18" fill="var(--paper)"/>
+            <rect x="282" y="410" width="74" height="46" rx="16" fill="var(--mist-2)"/>
+            <rect x="366" y="414" width="68" height="42" rx="16" fill="var(--clay-tint)"/>
+            <path d="M262 478H492V548a16 16 0 0 1-16 16H278a16 16 0 0 1-16-16z" fill="var(--forest)"/>
+            <path d="M286 478V564M322 478V564M358 478V564M394 478V564M430 478V564M466 478V564" stroke="var(--paper)" stroke-width="5" opacity=".18"/>
+            <rect x="262" y="500" width="70" height="34" rx="12" fill="var(--clay-tint)" opacity=".95"/>
+            <rect x="272" y="566" width="10" height="26" rx="3" fill="var(--forest)"/>
+            <rect x="472" y="566" width="10" height="26" rx="3" fill="var(--forest)"/>
+            <!-- rug + plant -->
+            <ellipse cx="150" cy="598" rx="132" ry="24" fill="var(--clay-tint)"/>
+            <ellipse cx="150" cy="598" rx="96" ry="15" fill="none" stroke="var(--paper)" stroke-width="2" opacity=".7"/>
+            <use href="#plant" x="20" y="462" width="86" height="120"/>
+          </g>
         </svg>
+        <span class="sticker s1">학교까지 걸어서</span>
+        <span class="sticker s2">이불은 대여도 가능해요</span>
+        <span class="sticker s3">공용공간은 매주 청소</span>
       </div>
+      <p class="art-note">일러스트는 분위기를 표현한 이미지예요.</p>
     </div>
   </div>
-
-  <nav class="pill-nav" aria-label="빠른 이동">
-    <a class="pill-nav-item" href="#top">홈</a>
-    <a class="pill-nav-item" href="#branches">지점안내</a>
-    <a class="pill-nav-item" href="#vacancy">공실현황</a>
-    <a class="pill-nav-item active" href="#contact">입주문의</a>
-  </nav>
 </header>
 
 <p class="lang-note">영문 및 다른 언어로 보시기를 원하시면 크롬 브라우저의 번역 기능을 활용해주세요 :)</p>
 
-<div class="band">
-  <div class="band-inner">
-    <div class="band-item"><span class="n mono">01</span><p>감성 인테리어로 아늑하게 꾸민 나만의 개인실이에요.</p></div>
-    <div class="band-item"><span class="n mono">02</span><p>대학가 도보권 위치라 통학 부담 없이 생활할 수 있어요.</p></div>
-    <div class="band-item"><span class="n mono">03</span><p>공용공간은 전담 청소실장님이 주 1회 정기적으로 관리해요.</p></div>
-    <div class="band-item"><span class="n mono">04</span><p>전기·도시가스 요금은 실사용 기간 기준으로 투명하게 정산해요.</p></div>
+<section class="why" id="why">
+  <div class="why-grid">
+    <h2>자취가 처음이어도<br>마음 편하게</h2>
+    <ul class="why-list">
+      <li>
+        <svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 19l8 8L30 9" stroke="var(--sage)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><h3>학교에서 가까워요</h3><p>성신여대, 성균관대, 한성대 모두 도보권이라 통학 시간이 짧아요.</p></div>
+      </li>
+      <li>
+        <svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 19l8 8L30 9" stroke="var(--sage)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><h3>내 방은 아늑하게</h3><p>개인실 중심으로 감성 있게 꾸몄어요. 이불이 필요하면 대여도 가능해요.</p></div>
+      </li>
+      <li>
+        <svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 19l8 8L30 9" stroke="var(--sage)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><h3>공용공간은 늘 깨끗하게</h3><p>전담 청소실장님이 매주 한 번 공용공간을 관리해요.</p></div>
+      </li>
+      <li>
+        <svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 19l8 8L30 9" stroke="var(--sage)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><h3>공과금은 투명하게</h3><p>전기와 도시가스 요금은 실제 사용 기간을 기준으로 나눠서 정산해요.</p></div>
+      </li>
+    </ul>
   </div>
-</div>
+</section>
 
-<section id="branches">
+<section class="block" id="branches">
   <div class="wrap">
-    <div class="sec-head">
-      <div><p class="sec-tag">지점 안내</p><h2>4개 지점, 각기 다른 대학가</h2></div>
-      <p>모든 지점은 셰어하우스 형태로 운영되며, 개인실 중심의 생활 공간과 공용 주방·욕실을 갖추고 있습니다.</p>
-    </div>
+    <h2 class="sec-title">우리 동네 고르기</h2>
+    <p class="sec-sub">세 곳의 대학가에 네 개 지점이 있어요. 모든 지점에 공용 주방과 욕실이 있어요.</p>
+
     <div class="branches">
-      <div class="branch">
-        <span class="area mono">성신여대 도보권</span>
-        <h3>성신여대점<br>1호점</h3>
-        <p class="desc">1층, 전 객실 1인실 5개 구성.</p>
-        <div class="branch-foot"><span class="avail none">만실 · 12/25~</span><a href="#vacancy">일정 보기 →</a></div>
-      </div>
-      <div class="branch">
-        <span class="area mono">성신여대 도보권</span>
-        <h3>성신여대점<br>2호점</h3>
-        <p class="desc">2층, 2인실 1개(좌/우)와 1인실 3개, 총 5베드.</p>
-        <div class="branch-foot"><span class="avail none">만실 · 2/22~</span><a href="#vacancy">일정 보기 →</a></div>
-      </div>
-      <div class="branch">
-        <span class="area mono">성균관대 도보권</span>
+      <article class="branch" data-key="sh1">
+        <div class="branch-art" aria-hidden="true">
+          <svg viewBox="0 0 240 300" preserveAspectRatio="xMidYMid slice">
+            <g clip-path="url(#archCard)">
+              <rect width="240" height="300" fill="var(--mist)"/>
+              <rect y="252" width="240" height="48" fill="var(--floor)"/>
+              <path d="M50 232V122a70 70 0 0 1 140 0V232z" fill="var(--sky)"/>
+              <circle cx="152" cy="98" r="14" fill="var(--clay-tint)"/>
+              <rect x="94" y="150" width="4" height="82" fill="var(--forest)"/>
+              <circle cx="96" cy="142" r="30" fill="var(--moss)"/>
+              <circle cx="120" cy="164" r="20" fill="var(--sage)"/>
+              <path d="M50 232V122a70 70 0 0 1 140 0V232z" fill="none" stroke="var(--forest)" stroke-width="5"/>
+              <path d="M120 52V232M50 160H190" stroke="var(--forest)" stroke-width="3"/>
+              <rect x="40" y="232" width="160" height="10" rx="3" fill="var(--forest)"/>
+              <use href="#plant" x="146" y="168" width="46" height="64"/>
+              <ellipse cx="120" cy="282" rx="86" ry="12" fill="var(--clay-tint)"/>
+            </g>
+          </svg>
+        </div>
+        <h3>성신여대점 1호점</h3>
+        <p class="area">성신여대 도보권</p>
+        <p class="desc">1층, 1인실 5개예요.</p>
+        <span class="next" data-next></span>
+      </article>
+
+      <article class="branch" data-key="sh2">
+        <div class="branch-art" aria-hidden="true" style="background:var(--mist-2)">
+          <svg viewBox="0 0 240 300" preserveAspectRatio="xMidYMid slice">
+            <g clip-path="url(#archCard)">
+              <rect width="240" height="300" fill="var(--mist-2)"/>
+              <rect y="262" width="240" height="38" fill="var(--floor)"/>
+              <path d="M78 190V118a42 42 0 0 1 84 0V190z" fill="var(--sky)"/>
+              <circle cx="120" cy="104" r="18" fill="var(--moss)"/>
+              <circle cx="104" cy="126" r="14" fill="var(--sage)"/>
+              <path d="M78 190V118a42 42 0 0 1 84 0V190z" fill="none" stroke="var(--forest)" stroke-width="5"/>
+              <path d="M120 76V190" stroke="var(--forest)" stroke-width="3"/>
+              <rect x="22" y="196" width="196" height="76" rx="18" fill="var(--sage)"/>
+              <rect x="30" y="226" width="180" height="50" rx="12" fill="var(--paper)"/>
+              <rect x="40" y="206" width="62" height="32" rx="12" fill="var(--paper)"/>
+              <rect x="138" y="206" width="62" height="32" rx="12" fill="var(--clay-tint)"/>
+              <path d="M22 244H218V268a12 12 0 0 1-12 12H34a12 12 0 0 1-12-12z" fill="var(--forest)"/>
+              <path d="M52 244V280M82 244V280M112 244V280M142 244V280M172 244V280M202 244V280" stroke="var(--paper)" stroke-width="4" opacity=".18"/>
+              <path d="M120 0V40" stroke="var(--forest)" stroke-width="2.5"/>
+              <path d="M104 58C104 46 112 40 120 40C128 40 136 46 136 58z" fill="var(--forest)"/>
+            </g>
+          </svg>
+        </div>
+        <h3>성신여대점 2호점</h3>
+        <p class="area">성신여대 도보권</p>
+        <p class="desc">2층, 2인실 1개(좌/우)와 1인실 3개로 총 5베드예요.</p>
+        <span class="next" data-next></span>
+      </article>
+
+      <article class="branch" data-key="skku">
+        <div class="branch-art" aria-hidden="true" style="background:var(--clay-tint)">
+          <svg viewBox="0 0 240 300" preserveAspectRatio="xMidYMid slice">
+            <g clip-path="url(#archCard)">
+              <rect width="240" height="300" fill="var(--clay-tint)"/>
+              <rect y="256" width="240" height="44" fill="var(--floor)"/>
+              <path d="M32 232V132a58 58 0 0 1 116 0V232z" fill="var(--sky)"/>
+              <path d="M32 214C52 190 66 196 82 204C96 178 122 176 148 198V232H32z" fill="var(--forest)"/>
+              <path d="M74 210C84 196 108 196 120 210" stroke="var(--sky)" stroke-width="3" fill="none"/>
+              <path d="M112 134l12 22h-24zM112 150l14 26h-28z" fill="var(--moss)"/>
+              <rect x="110" y="176" width="4" height="26" fill="var(--forest)"/>
+              <circle cx="58" cy="108" r="12" fill="var(--paper)"/>
+              <path d="M32 232V132a58 58 0 0 1 116 0V232z" fill="none" stroke="var(--forest)" stroke-width="5"/>
+              <path d="M90 74V232M32 168H148" stroke="var(--forest)" stroke-width="3"/>
+              <rect x="22" y="232" width="136" height="10" rx="3" fill="var(--forest)"/>
+              <rect x="170" y="130" width="52" height="128" rx="4" fill="var(--paper)" stroke="var(--forest)" stroke-width="4"/>
+              <path d="M170 168H222M170 208H222" stroke="var(--forest)" stroke-width="3"/>
+              <rect x="176" y="140" width="8" height="28" fill="var(--moss)"/><rect x="186" y="146" width="8" height="22" fill="var(--clay)"/><rect x="196" y="138" width="8" height="30" fill="var(--forest)"/>
+              <rect x="178" y="184" width="10" height="24" fill="var(--sage)"/><rect x="190" y="180" width="8" height="28" fill="var(--clay)"/>
+              <rect x="176" y="224" width="40" height="26" rx="4" fill="var(--moss)"/>
+              <ellipse cx="96" cy="284" rx="70" ry="10" fill="var(--paper)" opacity=".7"/>
+            </g>
+          </svg>
+        </div>
         <h3>성균관대점</h3>
-        <p class="desc">전 객실 1인실, 총 9개 객실 구성.</p>
-        <div class="branch-foot"><span class="avail none">만실 · 10/6~</span><a href="#vacancy">일정 보기 →</a></div>
-      </div>
-      <div class="branch">
-        <span class="area mono">한성대 도보권</span>
+        <p class="area">성균관대 도보권</p>
+        <p class="desc">1인실 9개예요.</p>
+        <span class="next" data-next></span>
+      </article>
+
+      <article class="branch" data-key="hs">
+        <div class="branch-art" aria-hidden="true" style="background:var(--accent-tint, var(--mist))">
+          <svg viewBox="0 0 240 300" preserveAspectRatio="xMidYMid slice">
+            <g clip-path="url(#archCard)">
+              <rect width="240" height="300" fill="var(--mist)"/>
+              <rect y="258" width="240" height="42" fill="var(--floor)"/>
+              <path d="M44 236V126a76 76 0 0 1 152 0V236z" fill="var(--sky)"/>
+              <circle cx="158" cy="98" r="15" fill="var(--clay-tint)"/>
+              <path d="M44 214C80 168 120 176 150 160C170 150 186 158 196 166V236H44z" fill="var(--moss)"/>
+              <path d="M96 178l6-8h8l6 8 6-8h8l6 8" stroke="var(--forest)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M44 236V126a76 76 0 0 1 152 0V236z" fill="none" stroke="var(--forest)" stroke-width="5"/>
+              <path d="M120 50V236M44 168H196" stroke="var(--forest)" stroke-width="3"/>
+              <rect x="34" y="236" width="172" height="10" rx="3" fill="var(--forest)"/>
+              <path d="M162 262h46l-4 14h-38z" fill="var(--forest)"/>
+              <rect x="170" y="238" width="30" height="26" rx="10" fill="var(--clay-tint)"/>
+              <use href="#plant" x="24" y="206" width="38" height="54"/>
+              <ellipse cx="116" cy="284" rx="80" ry="11" fill="var(--clay-tint)"/>
+            </g>
+          </svg>
+        </div>
         <h3>한성대점</h3>
-        <p class="desc">전 객실 1인실, 총 5개 객실 구성.</p>
-        <div class="branch-foot"><span class="avail none">만실 · 12/21~</span><a href="#vacancy">일정 보기 →</a></div>
+        <p class="area">한성대 도보권</p>
+        <p class="desc">1인실 5개예요.</p>
+        <span class="next" data-next></span>
+      </article>
+    </div>
+    <p class="caption">일러스트는 분위기를 표현한 이미지예요.</p>
+  </div>
+</section>
+
+<section class="block vacancy" id="vacancy">
+  <div class="wrap">
+    <div class="vac-top">
+      <div>
+        <h2 class="sec-title">언제 들어갈 수 있을까요</h2>
+        <p class="sec-sub">막대는 지금 계신 분의 입주 기간, 동그라미는 방이 비는 날이에요. 가격은 지점과 방에 따라 달라서 문의 주시면 안내해 드려요.</p>
+      </div>
+      <div class="seg" role="group" aria-label="보기 방식">
+        <button type="button" data-mode="date" aria-pressed="true">빠른 순</button>
+        <button type="button" data-mode="branch" aria-pressed="false">지점별</button>
+      </div>
+    </div>
+
+    <div class="vac-meta">
+      <span class="now" id="vac-now"></span>
+      <span class="legend"><i class="l-bar"></i>입주 중</span>
+      <span class="legend"><i class="l-dot"></i>비는 날</span>
+      <span>기준일 2026-09-22, 현재 계약 종료일 다음 날 기준</span>
+    </div>
+
+    <div class="tl">
+      <div class="tl-scroll">
+        <div class="tl-inner">
+          <div class="tl-axis" aria-hidden="true"><span></span><div class="tl-months" id="tl-months"></div><span></span></div>
+          <ol class="tl-list" id="tl-list"></ol>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="vacancy">
-  <div class="wrap">
-    <div class="sec-head">
-      <div><p class="sec-tag">공실 현황</p><h2>객실별 입주가능일</h2></div>
-      <p>현재 전 객실이 입주 중이며, 입주가능일은 현 계약 종료일의 다음 날 기준입니다. 가격은 지점·객실 조건에 따라 다르며 입주 문의 시 안내드립니다.</p>
+<section class="block apply" id="apply">
+  <div class="wrap apply-grid">
+    <div>
+      <h2>입주 신청서</h2>
+      <p class="sec-sub">신청서를 남겨 주시면 순서대로 연락드려요. 계약은 최소 6개월부터, 1년 단위로 이어갈 수 있어요.</p>
+      <ul class="reach">
+        <li><span class="k">전화</span><span><a class="v" href="tel:01086765732">010-8676-5732</a></span></li>
+        <li><span class="k">카카오톡 ID</span><span><span class="v">isimas</span><button type="button" class="copy" data-copy="isimas">복사</button></span></li>
+        <li><span class="k">상담 시간</span><span class="v">평일 10:00 - 19:00</span></li>
+      </ul>
+      <div class="apply-doodle" aria-hidden="true">
+        <svg viewBox="0 0 100 140" width="92" height="128"><use href="#plant" width="100" height="140"/></svg>
+        <span class="hand">궁금한 건 편하게 물어보세요</span>
+      </div>
     </div>
-    <span class="updated"><span class="dot"></span>기준일 2026-09-22 · 계약 종료일 기준</span>
-    <div class="table-scroll">
-      <table>
-        <thead>
-          <tr><th>지점</th><th>호실</th><th>타입</th><th>입주가능일</th><th>상태</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="branch-cell">성신여대 1호점</td><td class="mono-cell">1</td><td>1인실</td><td class="mono-cell">2026-12-25</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성신여대 1호점</td><td class="mono-cell">2</td><td>1인실</td><td class="mono-cell">2027-06-28</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성신여대 1호점</td><td class="mono-cell">3</td><td>1인실</td><td class="mono-cell">2026-12-27</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성신여대 1호점</td><td class="mono-cell">4</td><td>1인실</td><td class="mono-cell">2026-12-30</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성신여대 1호점</td><td class="mono-cell">5</td><td>1인실</td><td class="mono-cell">2027-01-30</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성신여대 2호점</td><td class="mono-cell">6 (좌)</td><td>2인실</td><td class="mono-cell">2027-03-01</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성신여대 2호점</td><td class="mono-cell">6 (우)</td><td>2인실</td><td class="mono-cell">2027-03-01</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성신여대 2호점</td><td class="mono-cell">7</td><td>1인실</td><td class="mono-cell">2027-02-23</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성신여대 2호점</td><td class="mono-cell">8</td><td>1인실</td><td class="mono-cell">2027-03-01</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성신여대 2호점</td><td class="mono-cell">9</td><td>1인실</td><td class="mono-cell">2027-02-22</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성균관대점</td><td class="mono-cell">1</td><td>1인실</td><td class="mono-cell">2027-08-25</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성균관대점</td><td class="mono-cell">2</td><td>1인실</td><td class="mono-cell">2026-10-06</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성균관대점</td><td class="mono-cell">3</td><td>1인실</td><td class="mono-cell">2027-01-05</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성균관대점</td><td class="mono-cell">5</td><td>1인실</td><td class="mono-cell">2026-12-27</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성균관대점</td><td class="mono-cell">6</td><td>1인실</td><td class="mono-cell">2027-08-22</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성균관대점</td><td class="mono-cell">7</td><td>1인실</td><td class="mono-cell">2027-07-28</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성균관대점</td><td class="mono-cell">8</td><td>1인실</td><td class="mono-cell">2027-01-01</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성균관대점</td><td class="mono-cell">9</td><td>1인실</td><td class="mono-cell">2027-01-08</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">성균관대점</td><td class="mono-cell">10</td><td>1인실</td><td class="mono-cell">2026-12-24</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">한성대점</td><td class="mono-cell">1</td><td>1인실</td><td class="mono-cell">2027-01-29</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">한성대점</td><td class="mono-cell">2</td><td>1인실</td><td class="mono-cell">2027-02-26</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">한성대점</td><td class="mono-cell">3</td><td>1인실</td><td class="mono-cell">2026-12-21</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">한성대점</td><td class="mono-cell">4</td><td>1인실</td><td class="mono-cell">2027-03-01</td><td><span class="pill occ">입주중</span></td></tr>
-          <tr><td class="branch-cell">한성대점</td><td class="mono-cell">5</td><td>1인실</td><td class="mono-cell">2027-01-14</td><td><span class="pill occ">입주중</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
 
-<section id="contact">
-  <div class="wrap">
-    <div class="contact-grid">
-      <div class="contact-copy">
-        <p class="sec-tag">입주 문의</p>
-        <h2>편하게 물어보세요</h2>
-        <p>보증금, 월세, 계약 기간, 방문 가능 시간 등 궁금하신 점을 남겨주시면 순서대로 답변드립니다.</p>
-        <div class="contact-card">
-          <div class="contact-row"><span class="k mono">TEL</span><span class="v">010-8676-5732</span></div>
-          <div class="contact-row"><span class="k mono">KAKAO ID</span><span class="v">isimas</span></div>
-          <div class="contact-row"><span class="k mono">HOURS</span><span class="v">평일 10:00 – 19:00</span></div>
+    <form class="form" id="apply-form">
+      <div class="form-row">
+        <div class="field"><label for="f-name">이름</label><input id="f-name" name="name" type="text" placeholder="홍길동" required></div>
+        <div class="field"><label for="f-phone">연락처</label><input id="f-phone" name="phone" type="tel" placeholder="010-0000-0000" required></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label for="f-nation">국적</label><input id="f-nation" name="nationality" type="text" placeholder="대한민국"></div>
+        <div class="field"><label for="f-age">나이</label><input id="f-age" name="age" type="number" min="0" placeholder="24"></div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="f-status">직장인, 취준생, 학생 여부</label>
+          <select id="f-status" name="status"><option>학생</option><option>취준생</option><option>직장인</option><option>기타</option></select>
+        </div>
+        <div class="field">
+          <label for="f-branch">문의 지점</label>
+          <select id="f-branch" name="branch"><option>성신여대점 1호점</option><option>성신여대점 2호점</option><option>성균관대점</option><option>한성대점</option><option>상관없음</option></select>
         </div>
       </div>
-      <form class="form" id="apply-form">
-        <p class="form-title mono">입주 신청서</p>
-        <div class="form-row">
-          <div class="field"><label for="f-name">1. 이름</label><input id="f-name" name="name" type="text" placeholder="홍길동" required></div>
-          <div class="field"><label for="f-phone">2. 연락처</label><input id="f-phone" name="phone" type="tel" placeholder="010-0000-0000" required></div>
+      <div class="form-row">
+        <div class="field"><label for="f-movein">입주 희망일</label><input id="f-movein" name="moveInDate" type="date"></div>
+        <div class="field">
+          <label for="f-period">입주 기간</label>
+          <select id="f-period" name="period"><option>6개월</option><option>1년</option><option>1년 이상 (협의)</option></select>
         </div>
-        <div class="form-row">
-          <div class="field"><label for="f-nation">3. 국적</label><input id="f-nation" name="nationality" type="text" placeholder="대한민국"></div>
-          <div class="field"><label for="f-age">4. 나이</label><input id="f-age" name="age" type="number" min="0" placeholder="24"></div>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label for="f-status">5. 직장인 / 취준생 / 학생여부</label>
-            <select id="f-status" name="status">
-              <option>학생</option>
-              <option>취준생</option>
-              <option>직장인</option>
-              <option>기타</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="f-branch">6. 문의지점</label>
-            <select id="f-branch" name="branch">
-              <option>성신여대점 1호점</option>
-              <option>성신여대점 2호점</option>
-              <option>성균관대점</option>
-              <option>한성대점</option>
-              <option>상관없음</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field"><label for="f-movein">7. 입주희망일</label><input id="f-movein" name="moveInDate" type="date"></div>
-          <div class="field">
-            <label for="f-period">8. 입주기간</label>
-            <select id="f-period" name="period">
-              <option>6개월</option>
-              <option>1년</option>
-              <option>1년 이상 (협의)</option>
-            </select>
-          </div>
-        </div>
-        <p class="field-hint">※ 계약은 최소 6개월부터, 1년 단위로 연장 가능합니다.</p>
-        <div class="field"><label for="f-msg">9. 기타 문의사항</label><textarea id="f-msg" name="message" rows="4" placeholder="궁금하신 점을 자유롭게 적어주세요"></textarea></div>
-        <div class="consent-row">
-          <label class="consent-check"><input type="checkbox" name="consent" value="동의" checked required> 동의합니다</label>
-          <button type="button" class="consent-open" id="consent-open">개인정보 수집·이용 안내 보기</button>
-        </div>
-        <dialog id="consent-dialog" class="consent-dialog">
-          <p class="consent-dialog-title">개인정보 수집 및 이용에 대한 안내</p>
-          <ul>
-            <li>개인정보 수집주체 : Urban Nature 쉐어하우스</li>
-            <li>개인정보 수집항목 : 이름, 연락처, 국적, 나이, 직업군, 문의지점, 입주희망일, 입주기간, 기타 문의사항</li>
-            <li>개인정보 수집 및 이용목적 : 입주 신청자 상담 및 입주 안내 연락 등</li>
-            <li>개인정보 보유 및 이용기간 : 수집일로부터 1년 (고객 동의 철회 시 지체없이 파기)</li>
-            <li>개인정보 취급 위탁을 받는 자 : Urban Nature 쉐어하우스</li>
-            <li>개인정보 취급 위탁을 하는 업무의 내용 : 고객정보 저장 및 서버관리</li>
-          </ul>
-          <p class="consent-warn">*상기 동의를 거부할 권리가 있으나, 수집 및 이용에 동의하지 않을 경우 입주 신청 접수 및 안내가 불가능합니다.*</p>
-          <button type="button" class="consent-close" id="consent-close">확인</button>
-        </dialog>
-        <button type="submit" id="apply-submit">신청서 제출</button>
-        <p class="form-note" id="apply-note">※ 제출 시 입주 신청 내역이 저장됩니다.</p>
-      </form>
-    </div>
+      </div>
+      <p class="field-hint">계약은 최소 6개월부터, 1년 단위로 연장할 수 있어요.</p>
+      <div class="field"><label for="f-msg">기타 문의사항</label><textarea id="f-msg" name="message" rows="4" placeholder="궁금한 점을 편하게 적어 주세요"></textarea></div>
+
+      <div class="consent-row">
+        <label class="consent-check"><input type="checkbox" name="consent" value="동의" checked required> 동의합니다</label>
+        <button type="button" class="consent-open" id="consent-open">개인정보 수집·이용 안내 보기</button>
+      </div>
+      <dialog id="consent-dialog" class="consent-dialog">
+        <p class="consent-dialog-title">개인정보 수집 및 이용에 대한 안내</p>
+        <ul>
+          <li>개인정보 수집주체 : Urban Nature 쉐어하우스</li>
+          <li>개인정보 수집항목 : 이름, 연락처, 국적, 나이, 직업군, 문의지점, 입주희망일, 입주기간, 기타 문의사항</li>
+          <li>개인정보 수집 및 이용목적 : 입주 신청자 상담 및 입주 안내 연락 등</li>
+          <li>개인정보 보유 및 이용기간 : 수집일로부터 1년 (고객 동의 철회 시 지체없이 파기)</li>
+          <li>개인정보 취급 위탁을 받는 자 : Urban Nature 쉐어하우스</li>
+          <li>개인정보 취급 위탁을 하는 업무의 내용 : 고객정보 저장 및 서버관리</li>
+        </ul>
+        <p class="consent-warn">*상기 동의를 거부할 권리가 있으나, 수집 및 이용에 동의하지 않을 경우 입주 신청 접수 및 안내가 불가능합니다.*</p>
+        <button type="button" class="consent-close" id="consent-close">확인</button>
+      </dialog>
+
+      <button type="submit" id="apply-submit">신청서 제출</button>
+      <p class="form-note" id="apply-note">제출하신 내용은 상담과 입주 안내에만 사용해요.</p>
+    </form>
   </div>
 </section>
 
 <footer>
-  <div class="wrap foot-inner">
-    <a class="brandmark" href="#top">
-      <svg viewBox="0 0 32 32" fill="none" width="24" height="24">
+  <div class="wrap foot">
+    <a class="brand" href="#top" aria-label="처음으로">
+      <svg viewBox="0 0 32 32" fill="none" width="26" height="26" aria-hidden="true">
         <rect x="4" y="10" width="13" height="18" stroke="var(--ink)" stroke-width="1.4"/>
-        <path d="M17 28C17 28 15 18 22 13C27.5 9 29 4 29 4" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M17 28C17 28 15 18 22 13C27.5 9 29 4 29 4" stroke="var(--moss)" stroke-width="1.8" stroke-linecap="round"/>
       </svg>
-      <span style="font-size:15px;">URBAN NATURE</span>
+      <b style="font-size:17px">Urban Nature Sharehouse</b>
     </a>
     <div class="foot-legal">
-      상호: Urban Nature Sharehouse &nbsp;·&nbsp; 대표: <span class="placeholder">[대표자명 입력]</span><br>
-      사업장주소: <span class="placeholder">[주소 입력]</span> &nbsp;·&nbsp; 연락처: 010-8676-5732
+      상호 Urban Nature Sharehouse &nbsp;/&nbsp; 대표 <span class="ph">[대표자명 입력]</span><br>
+      사업장 주소 <span class="ph">[주소 입력]</span> &nbsp;/&nbsp; 연락처 010-8676-5732
     </div>
   </div>
 </footer>
 
 <script>
-  // 여기에 Apps Script 웹 앱 배포 URL을 붙여넣으세요.
-  // 예: https://script.google.com/macros/s/AKfycb.../exec
+  // 입주 가능일 스냅샷 (입주가능일 시트 기준 2026-09-22). 시트가 바뀌면 이 목록만 고치면 돼요.
+  var BRANCHES = {
+    sh1:  { name:'성신여대점 1호점', short:'성신여대 1호점' },
+    sh2:  { name:'성신여대점 2호점', short:'성신여대 2호점' },
+    skku: { name:'성균관대점',       short:'성균관대점' },
+    hs:   { name:'한성대점',         short:'한성대점' }
+  };
+  var ROOMS = [
+    ['sh1','1','1인실','2026-12-25'], ['sh1','2','1인실','2027-06-28'], ['sh1','3','1인실','2026-12-27'],
+    ['sh1','4','1인실','2026-12-30'], ['sh1','5','1인실','2027-01-30'],
+    ['sh2','6 좌','2인실','2027-03-01'], ['sh2','6 우','2인실','2027-03-01'], ['sh2','7','1인실','2027-02-23'],
+    ['sh2','8','1인실','2027-03-01'], ['sh2','9','1인실','2027-02-22'],
+    ['skku','1','1인실','2027-08-25'], ['skku','2','1인실','2026-10-06'], ['skku','3','1인실','2027-01-05'],
+    ['skku','5','1인실','2026-12-27'], ['skku','6','1인실','2027-08-22'], ['skku','7','1인실','2027-07-28'],
+    ['skku','8','1인실','2027-01-01'], ['skku','9','1인실','2027-01-08'], ['skku','10','1인실','2026-12-24'],
+    ['hs','1','1인실','2027-01-29'], ['hs','2','1인실','2027-02-26'], ['hs','3','1인실','2026-12-21'],
+    ['hs','4','1인실','2027-03-01'], ['hs','5','1인실','2027-01-14']
+  ];
+
+  var AX_Y = 2026, AX_M = 10, AX_N = 12;
+  function parse(s){ var p = s.split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+  function pct(d){
+    var idx = (d.getFullYear()-AX_Y)*12 + (d.getMonth()+1-AX_M);
+    var dim = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+    var v = (idx + (d.getDate()-1)/dim) / AX_N * 100;
+    return Math.max(0, Math.min(100, v));
+  }
+  function short(d){ return String(d.getFullYear()).slice(2) + '.' + (d.getMonth()+1) + '.' + d.getDate(); }
+  function kor(d){ return (d.getMonth()+1) + '월 ' + d.getDate() + '일'; }
+
+  var today = new Date(); today.setHours(0,0,0,0);
+  var rooms = ROOMS.map(function(r){
+    return { b:r[0], room:r[1], type:r[2], date:parse(r[3]), open:parse(r[3]) <= today };
+  });
+  var minDate = rooms.reduce(function(m,r){ return r.date < m ? r.date : m; }, rooms[0].date);
+  var earliest = rooms.filter(function(r){ return r.date.getTime() === minDate.getTime(); })[0];
+  function roomLabel(r){ return /좌|우/.test(r.room) ? r.room.replace(' ','호 ') : r.room + '호'; }
+
+  // 지점 카드: 지점별 가장 빠른 입주일
+  document.querySelectorAll('.branch').forEach(function(card){
+    var key = card.getAttribute('data-key');
+    var list = rooms.filter(function(r){ return r.b === key; });
+    var first = list.reduce(function(m,r){ return r.date < m.date ? r : m; }, list[0]);
+    var el = card.querySelector('[data-next]');
+    el.innerHTML = first.open ? '<b>지금</b> 입주 가능' : '가장 빠른 입주 <b>' + kor(first.date) + '</b>';
+  });
+
+  // 히어로 한 줄 요약
+  var nr = document.getElementById('next-room');
+  document.getElementById('next-room-text').innerHTML = (earliest.open ? '지금 입주 가능한 방이 있어요' :
+    '가장 빨리 비는 방은 <b>' + BRANCHES[earliest.b].short + ' ' + roomLabel(earliest) + '</b>, ' + kor(earliest.date) + '이에요');
+  nr.hidden = false;
+
+  // 타임라인
+  var openCount = rooms.filter(function(r){ return r.open; }).length;
+  document.getElementById('vac-now').textContent = openCount ? ('지금 바로 입주 가능한 방 ' + openCount + '개') : '지금은 모든 방이 입주 중이에요';
+
+  var months = document.getElementById('tl-months'), mh = '';
+  for (var i=0; i<AX_N; i++){
+    var m = (AX_M-1+i)%12+1, y = AX_Y + Math.floor((AX_M-1+i)/12);
+    mh += '<span>' + ((i===0 || m===1) ? (y + ' ') : '') + m + '월</span>';
+  }
+  months.innerHTML = mh;
+
+  var listEl = document.getElementById('tl-list');
+  function rowHTML(r, withBranch){
+    var isFirst = r.date.getTime() === minDate.getTime();
+    var p = pct(r.date).toFixed(2);
+    return '<li class="tl-row' + (isFirst ? ' first' : '') + (r.open ? ' open' : '') + '">' +
+      '<span class="tl-name">' + roomLabel(r) + (r.type === '2인실' ? ' (2인실)' : '') +
+        (withBranch ? '<small>' + BRANCHES[r.b].short + '</small>' : '') + '</span>' +
+      '<span class="tl-track" aria-hidden="true"><i class="tl-bar" style="width:' + p + '%"></i><i class="tl-dot" style="left:' + p + '%"></i></span>' +
+      '<span class="tl-date">' + (r.open ? '지금' : short(r.date)) + (isFirst ? '<em>가장 빨라요</em>' : '') + '</span></li>';
+  }
+  var expanded = false, PREVIEW = 8;
+  function render(mode){
+    var h = '';
+    if (mode === 'date'){
+      var sorted = rooms.slice().sort(function(a,b){ return a.date - b.date; });
+      (expanded ? sorted : sorted.slice(0, PREVIEW)).forEach(function(r){ h += rowHTML(r, true); });
+      if (!expanded) h += '<li class="tl-more"><button type="button" id="tl-more">나머지 ' + (sorted.length - PREVIEW) + '개 방도 보기</button></li>';
+    } else {
+      Object.keys(BRANCHES).forEach(function(k){
+        var list = rooms.filter(function(r){ return r.b === k; });
+        h += '<li class="tl-group">' + BRANCHES[k].name + '<small>' + list.length + '개 방</small></li>';
+        list.forEach(function(r){ h += rowHTML(r, false); });
+      });
+    }
+    listEl.innerHTML = h;
+    var more = document.getElementById('tl-more');
+    if (more) more.addEventListener('click', function(){ expanded = true; render('date'); });
+  }
+  render('date');
+  document.querySelectorAll('.seg button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.seg button').forEach(function(b){ b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+      render(btn.getAttribute('data-mode'));
+    });
+  });
+
+  // 카카오톡 ID 복사
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var text = btn.getAttribute('data-copy');
+      var done = function(){ btn.textContent = '복사됨'; setTimeout(function(){ btn.textContent = '복사'; }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done); } else { done(); }
+    });
+  });
+
+  // 개인정보 안내 팝업
+  var consentDialog = document.getElementById('consent-dialog');
+  document.getElementById('consent-open').addEventListener('click', function(){ consentDialog.showModal(); });
+  document.getElementById('consent-close').addEventListener('click', function(){ consentDialog.close(); });
+  consentDialog.addEventListener('click', function(ev){ if (ev.target === consentDialog) consentDialog.close(); });
+
+  // 신청서 제출 (Google Apps Script -> 구글 시트)
   var APPLY_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxdVn3VICdWEtuKBoEvikKi9B58SjP7CfQlqiJ5fum_u2zy2CtwPL_XjzZCLB8hygbx/exec";
 
-  var consentDialog = document.getElementById('consent-dialog');
-  document.getElementById('consent-open').addEventListener('click', function () { consentDialog.showModal(); });
-  document.getElementById('consent-close').addEventListener('click', function () { consentDialog.close(); });
-  consentDialog.addEventListener('click', function (ev) { if (ev.target === consentDialog) consentDialog.close(); });
-
-  document.getElementById('apply-form').addEventListener('submit', function (ev) {
+  document.getElementById('apply-form').addEventListener('submit', function(ev){
     ev.preventDefault();
     var form = ev.target;
     var note = document.getElementById('apply-note');
     var btn = document.getElementById('apply-submit');
 
-    if (!APPLY_ENDPOINT_URL || APPLY_ENDPOINT_URL.indexOf('PASTE_') === 0) {
-      note.textContent = '※ 아직 접수 연결이 완료되지 않았습니다 (관리자 설정 필요).';
-      return;
-    }
-
     btn.disabled = true;
     btn.textContent = '제출 중...';
 
-    fetch(APPLY_ENDPOINT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: new FormData(form)
-    }).then(function () {
-      note.textContent = '신청이 접수되었습니다. 순서대로 연락드릴게요 :)';
+    fetch(APPLY_ENDPOINT_URL, { method:'POST', mode:'no-cors', body:new FormData(form) }).then(function(){
+      note.textContent = '신청이 접수되었어요. 순서대로 연락드릴게요.';
       btn.textContent = '제출 완료';
       form.reset();
-    }).catch(function () {
-      note.textContent = '전송에 실패했습니다. 잠시 후 다시 시도해주세요.';
+    }).catch(function(){
+      note.textContent = '전송에 실패했어요. 잠시 후 다시 시도해 주세요.';
       btn.disabled = false;
       btn.textContent = '신청서 제출';
     });
   });
 </script>
+</body>
+</html>
