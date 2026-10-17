@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Urban Nature · 입주자 안내 / Resident Info</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;600&family=Gowun+Dodum&display=swap">
+<style>
+  :root{ --ground:#f2f4ec; --paper:#fbfcf7; --mist:#e4eadb; --forest:#2e4636; --ink:#1f2b24; --ink-soft:#56665b; --ink-faint:#8a998e; --line:#d3dbc8; --clay:#c9714b; --on-forest:#f2f4ec; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--ground); color:var(--ink); font-family:'Gowun Dodum','Noto Sans KR','Malgun Gothic',sans-serif; font-size:16px; line-height:1.7; word-break:keep-all; }
+  .wrap{ max-width:640px; margin:0 auto; padding:28px 20px 64px; }
+  h1,h2{ font-family:'Hahmlet',serif; font-weight:600; margin:0; line-height:1.3; }
+  h1{ font-size:26px; } h2{ font-size:19px; margin-bottom:10px; }
+  .sub{ margin:8px 0 0; color:var(--ink-soft); }
+  .card{ margin-top:22px; padding:22px 20px; background:var(--paper); border:1px solid var(--line); border-radius:20px; }
+  label{ display:block; margin:14px 0 4px; font-size:14.5px; color:var(--ink-soft); }
+  label small{ color:var(--ink-faint); }
+  input[type=text],input[type=email],input[type=tel],select{ width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:12px; background:#fff; font:inherit; color:var(--ink); }
+  .pledge{ background:var(--mist); border-radius:14px; padding:14px 16px; font-size:15px; }
+  .pledge p{ margin:0 0 8px; } .pledge p:last-child{ margin:0; color:var(--ink-soft); }
+  .check{ display:flex; gap:10px; align-items:flex-start; margin:14px 0 0; color:var(--ink); }
+  .check input{ margin-top:6px; }
+  .sig{ margin-top:6px; border:1.5px dashed var(--ink-faint); border-radius:14px; background:#fff; touch-action:none; }
+  canvas{ display:block; width:100%; height:150px; border-radius:14px; }
+  .row{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:6px; font-size:13.5px; color:var(--ink-faint); }
+  button{ font:inherit; cursor:pointer; }
+  .ghost{ padding:6px 14px; border:1px solid var(--line); border-radius:999px; background:transparent; color:var(--ink-soft); }
+  .submit{ width:100%; margin-top:22px; padding:15px; border:0; border-radius:999px; background:var(--forest); color:var(--on-forest); font-size:17px; }
+  .submit:disabled{ opacity:.6; cursor:default; }
+  .msg{ margin-top:14px; text-align:center; font-size:15px; min-height:1.5em; }
+  .msg.err{ color:#b3402a; } .msg.ok{ color:var(--forest); }
+  .hp{ position:absolute; left:-9999px; }
+  .legal{ margin-top:10px; font-size:13px; color:var(--ink-faint); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>입주자 안내 · 정보 등록<br><span style="font-size:19px;color:var(--ink-soft);font-weight:400">Resident Info &amp; Recycling Pledge</span></h1>
+  <p class="sub">공동생활에 필요한 연락처를 남기고, 분리배출 협조에 서명해 주세요.<br>Please leave your contact details and sign the recycling cooperation pledge.</p>
+
+  <form id="resident-form" class="card" autocomplete="off">
+    <h2>1. 기본 정보 · Basic info</h2>
+    <label for="f-name">이름 · Name <small>(예약자명과 같게 / same as your booking)</small></label>
+    <input id="f-name" name="name" type="text" required>
+    <label for="f-branch">지점 · Branch</label>
+    <select id="f-branch" name="branch" required>
+      <option value="">선택 / Select</option>
+      <option>성신여대점 1호점</option>
+      <option>성신여대점 2호점</option>
+      <option>성균관대점</option>
+      <option>한성대점</option>
+    </select>
+    <label for="f-room">방 번호 · Room number</label>
+    <input id="f-room" name="room" type="text" placeholder="예 / e.g. 3" required>
+    <label for="f-booking">예약·계약 번호 · Booking number <small>(선택 / optional)</small></label>
+    <input id="f-booking" name="bookingNo" type="text">
+
+    <h2 style="margin-top:26px">2. 연락처 · Contact</h2>
+    <label for="f-email">이메일 · Email</label>
+    <input id="f-email" name="email" type="email" required>
+    <label for="f-phone">한국 연락처 · Korean phone <small>(있는 경우 / if you have one)</small></label>
+    <input id="f-phone" name="phone" type="tel" placeholder="010-0000-0000">
+    <label for="f-insta">인스타그램 ID · Instagram <small>(선택 / optional)</small></label>
+    <input id="f-insta" name="instagram" type="text" placeholder="@">
+    <label for="f-kakao">카카오톡 ID · KakaoTalk <small>(선택 / optional)</small></label>
+    <input id="f-kakao" name="kakao" type="text">
+
+    <h2 style="margin-top:26px">3. 재활용 쓰레기 협조 서약 · Recycling pledge</h2>
+    <div class="pledge" id="pledge-text">
+      <p>저는 공동생활 공간의 쓰레기를 지점에서 안내하는 분리배출 방법, 요일, 장소에 맞게 배출하고, 다른 입주자에게 불편이 없도록 협조하겠습니다.</p>
+      <p lang="en">I will sort and dispose of waste according to the recycling method, days and places announced by the house, and cooperate so that other residents are not inconvenienced.</p>
+      <p>서약 문구 버전 / Pledge version: <span id="pledge-ver"></span></p>
+    </div>
+    <label class="check"><input type="checkbox" id="f-agree"><span>위 내용을 읽고 이해했으며 협조하겠습니다.<br><span lang="en">I have read, understood and agree.</span></span></label>
+
+    <label style="margin-top:18px">서명 · Signature <small>(손가락이나 마우스로 그려 주세요 / draw with finger or mouse)</small></label>
+    <div class="sig"><canvas id="sig"></canvas></div>
+    <div class="row"><span id="sig-state">서명 전 / not signed</span><button type="button" class="ghost" id="sig-clear">지우기 · Clear</button></div>
+
+    <label class="check" style="margin-top:20px"><input type="checkbox" id="f-privacy"><span>개인정보 수집·이용에 동의합니다. 수집 항목: 이름, 지점·방번호, 이메일, 연락처, SNS ID, 서명. 목적: 입주자 공지·생활 협조 확인·분쟁 시 확인. 보유 기간: 퇴실 후 1년.<br><span lang="en">I consent to the collection of my name, room, email, phone, SNS IDs and signature for resident notices, confirming cooperation and resolving disputes, kept for 1 year after move-out.</span></span></label>
+
+    <input class="hp" type="text" name="website" tabindex="-1" aria-hidden="true">
+    <button class="submit" id="submit" type="submit">제출 · Submit</button>
+    <p class="msg" id="msg" role="status"></p>
+    <p class="legal">Urban Nature Sharehouse</p>
+  </form>
+</div>
+
+<script>
+  // 서명 접수 주소 (Apps Script 웹앱 URL). 비어 있으면 제출이 되지 않아요.
+  var RESIDENT_ENDPOINT_URL = "";
+  var PLEDGE_VERSION = "2026-10-v1";
+  document.getElementById('pledge-ver').textContent = PLEDGE_VERSION;
+
+  var canvas = document.getElementById('sig'), ctx = canvas.getContext('2d');
+  var drawing = false, hasInk = false;
+  function fit(){
+    var r = canvas.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+    canvas.width = Math.round(r.width * d); canvas.height = Math.round(r.height * d);
+    ctx.setTransform(d,0,0,d,0,0); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,r.width,r.height);
+    ctx.lineWidth = 2.4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1f2b24';
+    hasInk = false; setState();
+  }
+  function setState(){ document.getElementById('sig-state').textContent = hasInk ? '서명됨 / signed' : '서명 전 / not signed'; }
+  function pos(e){ var r = canvas.getBoundingClientRect(); return { x:e.clientX - r.left, y:e.clientY - r.top }; }
+  canvas.addEventListener('pointerdown', function(e){ drawing = true; canvas.setPointerCapture(e.pointerId); var p = pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p.x+.01,p.y+.01); ctx.stroke(); hasInk = true; setState(); });
+  canvas.addEventListener('pointermove', function(e){ if(!drawing) return; var p = pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+  ['pointerup','pointercancel'].forEach(function(t){ canvas.addEventListener(t, function(){ drawing = false; }); });
+  document.getElementById('sig-clear').addEventListener('click', fit);
+  window.addEventListener('load', fit);
+
+  var form = document.getElementById('resident-form'), msg = document.getElementById('msg'), btn = document.getElementById('submit');
+  function say(t, cls){ msg.textContent = t; msg.className = 'msg ' + (cls || ''); }
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    if (form.website.value) return;
+    if (!document.getElementById('f-agree').checked) return say('서약 내용에 체크해 주세요. / Please tick the pledge box.', 'err');
+    if (!hasInk) return say('서명을 그려 주세요. / Please sign above.', 'err');
+    if (!document.getElementById('f-privacy').checked) return say('개인정보 동의에 체크해 주세요. / Please accept the privacy consent.', 'err');
+    if (!RESIDENT_ENDPOINT_URL) return say('접수 주소가 아직 설정되지 않아 제출할 수 없어요. 관리자에게 문의해 주세요. / Submission is not set up yet. Please contact the host.', 'err');
+
+    var fd = new FormData(form);
+    fd.append('signature', canvas.toDataURL('image/png'));
+    fd.append('pledgeVersion', PLEDGE_VERSION);
+    fd.append('pledgeText', document.getElementById('pledge-text').innerText.replace(/\s+/g,' ').trim());
+    fd.append('privacyConsent', 'Y');
+    fd.append('clientTime', new Date().toISOString());
+    fd.append('userAgent', navigator.userAgent);
+
+    btn.disabled = true; btn.textContent = '제출 중... / Sending...'; say('');
+    fetch(RESIDENT_ENDPOINT_URL, { method:'POST', mode:'no-cors', body:fd }).then(function(){
+      say('제출되었어요. 감사합니다! / Submitted. Thank you!', 'ok');
+      btn.textContent = '제출 완료 · Done';
+      form.reset(); fit();
+    }).catch(function(){
+      say('전송에 실패했어요. 잠시 후 다시 시도해 주세요. / Failed to send. Please try again.', 'err');
+      btn.disabled = false; btn.textContent = '제출 · Submit';
+    });
+  });
+</script>
+</body>
+</html>

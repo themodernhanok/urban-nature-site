@@ -127,7 +127,13 @@
   @keyframes stick{ from{ opacity:0; transform:rotate(var(--r)) scale(.85); } }
   .art-note{ margin-top:12px; font-size:13px; color:var(--ink-faint); text-align:right; }
 
-  .lang-note{ text-align:center; font-size:13.5px; color:var(--ink-faint); padding:14px 20px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .lang-note{ padding:30px 20px; background:var(--mist); border-top:1px solid var(--line); border-bottom:1px solid var(--line); text-align:center; }
+  .lang-note-inner{ max-width:860px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:14px 36px; align-items:start; text-align:left; }
+  .lang-note .lang-badge{ grid-column:1 / -1; justify-self:center; padding:5px 16px; border-radius:999px; background:var(--forest); color:var(--on-forest); font-size:14px; letter-spacing:.02em; }
+  .lang-note h2{ font-size:clamp(20px,2.6vw,26px); font-weight:600; line-height:1.35; }
+  .lang-note p{ margin-top:8px; font-size:clamp(16px,1.9vw,18px); color:var(--ink-soft); line-height:1.7; }
+  .lang-note b{ font-weight:600; color:var(--ink); }
+  @media (max-width:720px){ .lang-note-inner{ grid-template-columns:1fr; } }
 
   /* ---------- WHY (forest band) ---------- */
   .why{ background:var(--forest); color:var(--on-forest); border-radius:44px 44px 0 0; margin-top:-1px; position:relative; }
@@ -155,6 +161,21 @@
   .branch .desc{ margin-top:10px; font-size:15.5px; color:var(--ink-soft); }
   .branch .next{ margin-top:14px; display:inline-block; font-size:14.5px; padding:6px 14px; border-radius:999px; background:var(--mist); color:var(--ink); }
   .branch .next b{ font-weight:400; color:var(--clay); }
+  .branch{ cursor:pointer; border-radius:24px; transition:transform .15s; }
+  .branch:hover{ transform:translateY(-2px); }
+  .branch[aria-pressed="true"] h3{ color:var(--clay); }
+  .branch[aria-pressed="true"] .branch-art{ outline:3px solid var(--clay); outline-offset:4px; }
+  .branch-hint{ margin-top:22px; font-size:14.5px; color:var(--ink-faint); text-align:center; }
+  .reviews{ margin-top:36px; padding:30px 28px; border-radius:24px; background:var(--paper); border:1px solid var(--line); }
+  .reviews h3{ font-size:22px; font-weight:600; }
+  .review-list{ margin:18px 0 0; padding:0; list-style:none; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+  .review{ padding:18px 20px; border-radius:18px; background:var(--ground); }
+  .review-meta{ display:flex; justify-content:space-between; gap:12px; font-size:13.5px; color:var(--ink-faint); }
+  .review-meta b{ font-weight:600; color:var(--ink); }
+  .review p{ margin-top:10px; font-size:15.5px; color:var(--ink-soft); white-space:pre-line; }
+  .sample-tag{ margin-left:8px; padding:1px 8px; border-radius:999px; background:var(--clay-tint); color:var(--clay); font-style:normal; font-size:12px; font-weight:400; }
+  .review-empty{ margin-top:14px; color:var(--ink-soft); font-size:15.5px; }
+  .review-empty a{ color:var(--forest); }
   .caption{ margin-top:54px; font-size:13.5px; color:var(--ink-faint); }
 
   /* ---------- VACANCY TIMELINE ---------- */
@@ -237,6 +258,11 @@
 
   .consent-dialog{ width:min(92vw,420px); padding:26px 26px 20px; border:none; border-radius:24px; background:var(--paper); color:var(--ink); box-shadow:0 24px 60px -20px rgba(20,30,20,.45); font-size:14px; line-height:1.65; }
   .consent-dialog::backdrop{ background:rgba(20,28,20,.5); }
+  .vac-lock{ margin-top:8px; padding:34px 28px; border:1.5px dashed var(--line); border-radius:24px; text-align:center; background:var(--ground); }
+  .vac-lock-title{ font-family:'Hahmlet',serif; font-weight:600; font-size:20px; margin-bottom:8px; }
+  .vac-lock .sec-sub{ margin:0 auto 22px; max-width:460px; }
+  body:not(.locked) .vac-lock{ display:none; }
+  body.locked .vac-gated, body.locked [data-next], body.locked #next-room{ display:none !important; }
   .consent-dialog-title{ font-family:'Hahmlet',serif; font-weight:600; font-size:18px; margin-bottom:12px; }
   .consent-dialog ul{ margin:0 0 12px; padding-left:18px; color:var(--ink-soft); }
   .consent-warn{ margin-bottom:16px; font-weight:400; text-decoration:underline; text-underline-offset:3px; }
@@ -275,7 +301,7 @@
   }
 </style>
 </head>
-<body>
+<body class="locked">
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
@@ -317,7 +343,8 @@
       <a href="#why">좋은 점</a>
       <a href="#branches">지점</a>
       <a href="#vacancy">입주 가능일</a>
-      <a href="#apply" class="nav-cta">입주 신청</a>
+      <a href="#language" lang="en">English</a>
+      <a href="#apply" class="nav-cta">상담 신청</a>
     </div>
   </div>
 </nav>
@@ -329,7 +356,7 @@
       <p class="hero-sub">성신여대, 성균관대, 한성대 도보권에서 운영하는 여성 전용 쉐어하우스예요. 아늑하게 꾸민 개인실과 매주 청소하는 공용공간에서 자취를 시작해 보세요.</p>
       <div class="hero-actions">
         <a class="btn btn-solid" href="#vacancy">입주 가능한 방 보기</a>
-        <a class="btn btn-line" href="#apply">입주 신청서 쓰기</a>
+        <a class="btn btn-line" href="#apply">상담 신청하기</a>
       </div>
       <p class="hero-contact">전화 <a href="tel:01086765732">010-8676-5732</a><span>/</span>카카오톡 <b style="font-weight:400">isimas</b></p>
       <a class="next-room" href="#vacancy" id="next-room" hidden><i></i><span id="next-room-text"></span></a>
@@ -398,7 +425,19 @@
   </div>
 </header>
 
-<p class="lang-note">영문 및 다른 언어로 보시기를 원하시면 크롬 브라우저의 번역 기능을 활용해주세요 :)</p>
+<section class="lang-note" id="language" aria-label="Language / 언어 안내">
+  <div class="lang-note-inner">
+    <span class="lang-badge">English · 中文 · 日本語 · Other languages</span>
+    <div>
+      <h2>영어로 보고 싶으신가요?</h2>
+      <p>크롬(Chrome) 브라우저에서 페이지의 빈 곳을 <b>마우스 오른쪽 클릭</b> → <b>"한국어에서 번역"</b> 또는 <b>"영어로 번역"</b>을 눌러 주세요. 주소창 오른쪽의 번역 아이콘을 눌러도 돼요.</p>
+    </div>
+    <div lang="en">
+      <h2>Want to read this in English?</h2>
+      <p>In Google Chrome, <b>right-click</b> anywhere on the page and choose <b>"Translate to English"</b>. You can also click the translate icon at the right end of the address bar.</p>
+    </div>
+  </div>
+</section>
 
 <section class="why" id="why">
   <div class="why-grid">
@@ -539,13 +578,20 @@
         <span class="next" data-next></span>
       </article>
     </div>
+    <p class="branch-hint">지점을 누르면 지금 살고 계신 분들의 후기를 볼 수 있어요.</p>
+    <div class="reviews" id="reviews" aria-live="polite" hidden></div>
     <p class="caption">일러스트는 분위기를 표현한 이미지예요.</p>
   </div>
 </section>
 
 <section class="block vacancy" id="vacancy">
   <div class="wrap">
-    <div class="vac-top">
+    <div class="vac-lock">
+      <p class="vac-lock-title">상담 신청 후 방 입실 현황을 보여드려요</p>
+      <p class="sec-sub">상담 신청을 남기고 확인을 누르면 지점별 방 입실 현황과 입주 가능일을 바로 확인할 수 있어요.</p>
+      <a class="btn btn-solid" href="#apply">상담 신청하기</a>
+    </div>
+    <div class="vac-top vac-gated">
       <div>
         <h2 class="sec-title">언제 들어갈 수 있을까요</h2>
         <p class="sec-sub">막대는 지금 계신 분의 입주 기간, 동그라미는 방이 비는 날이에요. 가격은 지점과 방에 따라 달라서 문의 주시면 안내해 드려요.</p>
@@ -556,14 +602,14 @@
       </div>
     </div>
 
-    <div class="vac-meta">
+    <div class="vac-meta vac-gated">
       <span class="now" id="vac-now"></span>
       <span class="legend"><i class="l-bar"></i>입주 중</span>
       <span class="legend"><i class="l-dot"></i>비는 날</span>
       <span>기준일 2026-09-22, 현재 계약 종료일 다음 날 기준</span>
     </div>
 
-    <div class="tl">
+    <div class="tl vac-gated">
       <div class="tl-scroll">
         <div class="tl-inner">
           <div class="tl-axis" aria-hidden="true"><span></span><div class="tl-months" id="tl-months"></div><span></span></div>
@@ -577,8 +623,8 @@
 <section class="block apply" id="apply">
   <div class="wrap apply-grid">
     <div>
-      <h2>입주 신청서</h2>
-      <p class="sec-sub">신청서를 남겨 주시면 순서대로 연락드려요. 계약은 최소 6개월부터, 1년 단위로 이어갈 수 있어요.</p>
+      <h2>상담 신청</h2>
+      <p class="sec-sub">상담 신청을 남겨 주시면 순서대로 연락드려요. 신청 후 확인을 누르면 방 입실 현황을 바로 볼 수 있어요. 계약은 최소 6개월부터, 1년 단위로 이어갈 수 있어요.</p>
       <ul class="reach">
         <li><span class="k">전화</span><span><a class="v" href="tel:01086765732">010-8676-5732</a></span></li>
         <li><span class="k">카카오톡 ID</span><span><span class="v">isimas</span><button type="button" class="copy" data-copy="isimas">복사</button></span></li>
@@ -637,9 +683,15 @@
         <button type="button" class="consent-close" id="consent-close">확인</button>
       </dialog>
 
-      <button type="submit" id="apply-submit">신청서 제출</button>
+      <button type="submit" id="apply-submit">상담 신청</button>
       <p class="form-note" id="apply-note">제출하신 내용은 상담과 입주 안내에만 사용해요.</p>
     </form>
+
+    <dialog id="done-dialog" class="consent-dialog">
+      <p class="consent-dialog-title">상담 신청이 접수되었어요</p>
+      <p>순서대로 연락드릴게요. 확인을 누르면 방 입실 현황을 보여드려요.</p>
+      <button type="button" class="consent-close" id="done-confirm">확인</button>
+    </dialog>
   </div>
 </section>
 
@@ -760,6 +812,77 @@
     });
   });
 
+  // 입주자 후기: 지점 카드를 누르면 해당 지점 후기를 보여줘요.
+  // 실제 입주자가 공개에 동의한 후기만 넣어 주세요. 형식: { name:'김○○', period:'2025.09 ~ 2026.03', text:'후기 내용' }
+  var REVIEWS = {
+    // 성신여대점 1호점 (1층, 1~5번방)
+    // sample:true 는 화면 미리보기용 샘플이에요. 배포 전에 지우고 실제 후기로 바꿔 주세요.
+    sh1: [
+      { sample:true, name:'샘플○○', period:'2025.09 ~ 2026.03', text:'방이 아늑하고 공용 주방도 깔끔하게 관리돼서 지내기 편했어요. (샘플 후기)' },
+      { sample:true, name:'샘플○○', period:'2026.01 ~ 2026.07', text:'혼자 사는 느낌이면서도 이웃이 있어 든든했어요. (샘플 후기)' }
+    ],
+    // 성신여대점 2호점 (2층, 6~9번방)
+    sh2: [
+      { sample:true, name:'샘플○○', period:'2025.10 ~ 2026.04', text:'공용 공간 청소가 정기적으로 되어서 늘 깨끗하게 쓸 수 있었어요. (샘플 후기)' }
+    ],
+    // 성균관대점
+    skku: [
+      { sample:true, name:'샘플○○', period:'2025.08 ~ 2026.02', text:'학교 다니기 편하고 조용해서 공부하기 좋았어요. (샘플 후기)' }
+    ],
+    // 한성대점
+    hs: [
+      { sample:true, name:'샘플○○', period:'2025.11 ~ 2026.05', text:'관리가 꼼꼼하고 문의하면 바로 답을 주셔서 안심이 됐어요. (샘플 후기)' }
+    ]
+  };
+
+  var reviewsEl = document.getElementById('reviews');
+  var branchCards = document.querySelectorAll('.branch');
+  function showReviews(key){
+    reviewsEl.textContent = '';
+    var h = document.createElement('h3');
+    h.textContent = BRANCHES[key].name + ' 입주자 후기';
+    reviewsEl.appendChild(h);
+    var list = REVIEWS[key] || [];
+    if (!list.length){
+      var empty = document.createElement('p');
+      empty.className = 'review-empty';
+      empty.appendChild(document.createTextNode('후기를 준비하고 있어요. 궁금한 점은 '));
+      var a = document.createElement('a'); a.href = '#apply'; a.textContent = '상담 신청';
+      empty.appendChild(a);
+      empty.appendChild(document.createTextNode('으로 편하게 물어보세요.'));
+      reviewsEl.appendChild(empty);
+    } else {
+      var ul = document.createElement('ul'); ul.className = 'review-list';
+      list.forEach(function(r){
+        var li = document.createElement('li'); li.className = 'review';
+        var meta = document.createElement('div'); meta.className = 'review-meta';
+        var who = document.createElement('b'); who.textContent = r.name;
+        if (r.sample){ var tag = document.createElement('i'); tag.className = 'sample-tag'; tag.textContent = '샘플'; who.appendChild(tag); }
+        var per = document.createElement('span'); per.textContent = r.period || '';
+        meta.appendChild(who); meta.appendChild(per);
+        var p = document.createElement('p'); p.textContent = r.text;
+        li.appendChild(meta); li.appendChild(p); ul.appendChild(li);
+      });
+      reviewsEl.appendChild(ul);
+    }
+    reviewsEl.hidden = false;
+  }
+  branchCards.forEach(function(card){
+    var key = card.getAttribute('data-key');
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-pressed', 'false');
+    function pick(){
+      var already = card.getAttribute('aria-pressed') === 'true';
+      branchCards.forEach(function(c){ c.setAttribute('aria-pressed', 'false'); });
+      if (already){ reviewsEl.hidden = true; return; }
+      card.setAttribute('aria-pressed', 'true');
+      showReviews(key);
+    }
+    card.addEventListener('click', pick);
+    card.addEventListener('keydown', function(ev){ if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); pick(); } });
+  });
+
   // 카카오톡 ID 복사
   document.querySelectorAll('[data-copy]').forEach(function(btn){
     btn.addEventListener('click', function(){
@@ -789,14 +912,29 @@
 
     fetch(APPLY_ENDPOINT_URL, { method:'POST', mode:'no-cors', body:new FormData(form) }).then(function(){
       note.textContent = '신청이 접수되었어요. 순서대로 연락드릴게요.';
-      btn.textContent = '제출 완료';
+      btn.textContent = '접수 완료';
       form.reset();
+      doneDialog.showModal();
     }).catch(function(){
       note.textContent = '전송에 실패했어요. 잠시 후 다시 시도해 주세요.';
       btn.disabled = false;
-      btn.textContent = '신청서 제출';
+      btn.textContent = '상담 신청';
     });
   });
+
+  // 상담 신청 -> 확인 -> 방 입실 현황 공개
+  var doneDialog = document.getElementById('done-dialog');
+  var UNLOCK_KEY = 'unVacancyUnlocked';
+  try { if (localStorage.getItem(UNLOCK_KEY) === '1') document.body.classList.remove('locked'); } catch(e){}
+  function unlockVacancy(){
+    if (doneDialog.open) doneDialog.close();
+    document.body.classList.remove('locked');
+    try { localStorage.setItem(UNLOCK_KEY, '1'); } catch(e){}
+    document.getElementById('vacancy').scrollIntoView({ behavior:'smooth' });
+  }
+  document.getElementById('done-confirm').addEventListener('click', unlockVacancy);
+  doneDialog.addEventListener('click', function(ev){ if (ev.target === doneDialog) unlockVacancy(); });
+  doneDialog.addEventListener('cancel', function(){ unlockVacancy(); });
 </script>
 </body>
 </html>
