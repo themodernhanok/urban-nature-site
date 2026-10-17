@@ -173,6 +173,20 @@
   .review-meta{ display:flex; justify-content:space-between; gap:12px; font-size:13.5px; color:var(--ink-faint); }
   .review-meta b{ font-weight:600; color:var(--ink); }
   .review p{ margin-top:10px; font-size:15.5px; color:var(--ink-soft); white-space:pre-line; }
+  .admin-toggle{ position:fixed; right:10px; bottom:8px; z-index:70; display:flex; align-items:center; gap:5px; padding:3px 8px; border-radius:999px; background:color-mix(in srgb, var(--paper) 80%, transparent); color:var(--ink-faint); font-size:12px; cursor:pointer; user-select:none; }
+  .admin-toggle input{ margin:0; }
+  body.admin-on [data-edit]{ outline:2px dashed var(--clay); outline-offset:3px; cursor:text; min-width:2em; }
+  body.admin-on [data-edit]:focus{ outline-style:solid; background:color-mix(in srgb, var(--clay-tint) 55%, transparent); }
+  .admin-bar{ position:fixed; left:50%; bottom:44px; transform:translateX(-50%); z-index:70; display:flex; align-items:center; gap:10px; max-width:94vw; padding:10px 14px; border-radius:18px; background:var(--forest); color:var(--on-forest); box-shadow:0 12px 30px -10px rgba(20,30,20,.5); font-size:14px; }
+  .admin-bar[hidden]{ display:none; }
+  .admin-bar button{ padding:6px 14px; border:0; border-radius:999px; background:var(--on-forest); color:var(--forest); font-size:14px; cursor:pointer; }
+  .admin-bar button.line{ background:transparent; color:var(--on-forest); border:1px solid color-mix(in srgb, var(--on-forest) 55%, transparent); }
+  .admin-bar .admin-status{ min-width:6em; }
+  .admin-pw{ width:100%; margin-top:8px; padding:11px 12px; border:1px solid var(--line); border-radius:12px; background:#fff; font:inherit; color:var(--ink); }
+  .admin-err{ margin:8px 0 0; color:#b3402a; font-size:13.5px; min-height:1.3em; }
+  .admin-actions{ margin-top:12px; display:flex; gap:8px; justify-content:flex-end; }
+  .admin-actions button{ padding:9px 18px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--ink); font:inherit; cursor:pointer; }
+  .admin-actions button.go{ background:var(--forest); color:var(--on-forest); border-color:var(--forest); }
   .sample-tag{ margin-left:8px; padding:1px 8px; border-radius:999px; background:var(--clay-tint); color:var(--clay); font-style:normal; font-size:12px; font-weight:400; }
   .review-empty{ margin-top:14px; color:var(--ink-soft); font-size:15.5px; }
   .review-empty a{ color:var(--forest); }
@@ -441,7 +455,7 @@
 
 <section class="why" id="why">
   <div class="why-grid">
-    <h2>자취가 처음이어도<br>마음 편하게</h2>
+    <h2>쉐어하우스가 처음이어도 편안하게,<br>혼자 살지 않으니까 안심</h2>
     <ul class="why-list">
       <li>
         <svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M6 19l8 8L30 9" stroke="var(--sage)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -711,6 +725,24 @@
   </div>
 </footer>
 
+<label class="admin-toggle"><input type="checkbox" id="admin-check"> 관리자</label>
+<div class="admin-bar" id="admin-bar" hidden>
+  <span class="admin-status" id="admin-status">문구를 눌러 바로 고쳐 보세요</span>
+  <button type="button" id="admin-save">저장</button>
+  <button type="button" class="line" id="admin-undo">되돌리기</button>
+  <button type="button" class="line" id="admin-exit">종료</button>
+</div>
+<dialog id="admin-dialog" class="consent-dialog">
+  <p class="consent-dialog-title">관리자 확인</p>
+  <label for="admin-pw" style="font-size:14px">관리자 비밀번호</label>
+  <input id="admin-pw" class="admin-pw" type="password" autocomplete="off">
+  <p class="admin-err" id="admin-err" role="alert"></p>
+  <div class="admin-actions">
+    <button type="button" id="admin-cancel">취소</button>
+    <button type="button" class="go" id="admin-go">확인</button>
+  </div>
+</dialog>
+
 <script>
   // 입주 가능일 스냅샷 (입주가능일 시트 기준 2026-09-22). 시트가 바뀌면 이 목록만 고치면 돼요.
   var BRANCHES = {
@@ -873,6 +905,7 @@
     card.setAttribute('tabindex', '0');
     card.setAttribute('aria-pressed', 'false');
     function pick(){
+      if (document.body.classList.contains('admin-on')) return;
       var already = card.getAttribute('aria-pressed') === 'true';
       branchCards.forEach(function(c){ c.setAttribute('aria-pressed', 'false'); });
       if (already){ reviewsEl.hidden = true; return; }
@@ -880,7 +913,7 @@
       showReviews(key);
     }
     card.addEventListener('click', pick);
-    card.addEventListener('keydown', function(ev){ if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); pick(); } });
+    card.addEventListener('keydown', function(ev){ if (ev.target !== card) return; if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); pick(); } });
   });
 
   // 카카오톡 ID 복사
@@ -935,6 +968,115 @@
   document.getElementById('done-confirm').addEventListener('click', unlockVacancy);
   doneDialog.addEventListener('click', function(ev){ if (ev.target === doneDialog) unlockVacancy(); });
   doneDialog.addEventListener('cancel', function(){ unlockVacancy(); });
+  // ===== 관리자 모드: 일부 문구를 화면에서 바로 고쳐서 저장 =====
+  // 저장 주소는 apps-script/resident-intake.gs 웹앱 URL(입주자 접수와 같은 주소)이에요. 비어 있으면 저장은 안 되고 화면 미리보기만 돼요.
+  var ADMIN_ENDPOINT_URL = "";
+  var EDITABLE = [
+    { k:'hero-sub', s:'.hero-sub' },
+    { k:'sticker-1', s:'.sticker.s1' }, { k:'sticker-2', s:'.sticker.s2' }, { k:'sticker-3', s:'.sticker.s3' },
+    { k:'why-1-title', s:'.why-list li:nth-child(1) h3' }, { k:'why-1-text', s:'.why-list li:nth-child(1) p' },
+    { k:'why-2-title', s:'.why-list li:nth-child(2) h3' }, { k:'why-2-text', s:'.why-list li:nth-child(2) p' },
+    { k:'why-3-title', s:'.why-list li:nth-child(3) h3' }, { k:'why-3-text', s:'.why-list li:nth-child(3) p' },
+    { k:'why-4-title', s:'.why-list li:nth-child(4) h3' }, { k:'why-4-text', s:'.why-list li:nth-child(4) p' },
+    { k:'branches-sub', s:'#branches .sec-sub' },
+    { k:'sh1-desc', s:'.branch[data-key="sh1"] .desc' }, { k:'sh2-desc', s:'.branch[data-key="sh2"] .desc' },
+    { k:'skku-desc', s:'.branch[data-key="skku"] .desc' }, { k:'hs-desc', s:'.branch[data-key="hs"] .desc' },
+    { k:'vac-lock-title', s:'.vac-lock-title' }, { k:'vac-lock-sub', s:'.vac-lock .sec-sub' },
+    { k:'apply-sub', s:'#apply .sec-sub' }, { k:'apply-hours', s:'.reach li:nth-child(3) .v' }, { k:'apply-note', s:'#apply-note' },
+    { k:'foot-ceo', s:'.foot-legal .ph', i:0 }, { k:'foot-addr', s:'.foot-legal .ph', i:1 }
+  ];
+  function resolveEl(e){ return document.querySelectorAll(e.s)[e.i || 0] || null; }
+  function applyTexts(map){
+    EDITABLE.forEach(function(e){
+      var el = resolveEl(e);
+      if (el && typeof map[e.k] === 'string' && map[e.k]) el.textContent = map[e.k].slice(0, 300);
+    });
+  }
+  if (ADMIN_ENDPOINT_URL){
+    fetch(ADMIN_ENDPOINT_URL + '?action=texts').then(function(r){ return r.json(); })
+      .then(function(d){ applyTexts((d && d.texts) || {}); }).catch(function(){});
+  }
+
+  var adminPw = '', baseline = {};
+  var adminChk = document.getElementById('admin-check'), adminBar = document.getElementById('admin-bar');
+  var adminStatus = document.getElementById('admin-status'), adminDialog = document.getElementById('admin-dialog');
+  var adminPwEl = document.getElementById('admin-pw'), adminErr = document.getElementById('admin-err');
+  function adminSay(t){ adminStatus.textContent = t; }
+  function currentMap(){
+    var m = {};
+    EDITABLE.forEach(function(e){ var el = resolveEl(e); if (el) m[e.k] = el.textContent.replace(/\s+/g, ' ').trim(); });
+    return m;
+  }
+  function restoreBaseline(){
+    EDITABLE.forEach(function(e){ var el = resolveEl(e); if (el && baseline[e.k] != null) el.textContent = baseline[e.k]; });
+  }
+  function enterAdmin(){
+    baseline = currentMap();
+    document.body.classList.add('admin-on');
+    EDITABLE.forEach(function(e){
+      var el = resolveEl(e); if (!el) return;
+      el.setAttribute('data-edit', e.k); el.setAttribute('contenteditable', 'true'); el.spellcheck = false;
+    });
+    adminBar.hidden = false;
+    adminSay(ADMIN_ENDPOINT_URL ? '점선 문구를 눌러 바로 고쳐 보세요' : '저장 주소 미설정: 화면 미리보기만 돼요');
+  }
+  function exitAdmin(){
+    restoreBaseline();
+    document.body.classList.remove('admin-on');
+    EDITABLE.forEach(function(e){
+      var el = resolveEl(e); if (!el) return;
+      el.removeAttribute('data-edit'); el.removeAttribute('contenteditable');
+    });
+    adminBar.hidden = true; adminChk.checked = false; adminPw = '';
+  }
+  document.addEventListener('keydown', function(ev){
+    if (ev.key === 'Enter' && ev.target.hasAttribute && ev.target.hasAttribute('data-edit')) ev.preventDefault();
+  });
+  document.addEventListener('paste', function(ev){
+    if (ev.target.closest && ev.target.closest('[data-edit]')){
+      ev.preventDefault();
+      var t = ((ev.clipboardData || window.clipboardData).getData('text') || '').replace(/\s+/g, ' ');
+      document.execCommand('insertText', false, t);
+    }
+  });
+
+  function adminPost(payload){
+    return fetch(ADMIN_ENDPOINT_URL, { method:'POST', body:JSON.stringify(payload) }).then(function(r){ return r.json(); });
+  }
+  function closeAdminDialog(){ if (adminDialog.open) adminDialog.close(); }
+  function adminLogin(){
+    var pw = adminPwEl.value;
+    if (!pw){ adminErr.textContent = '비밀번호를 입력해 주세요.'; return; }
+    if (!ADMIN_ENDPOINT_URL){ closeAdminDialog(); enterAdmin(); return; }
+    adminErr.textContent = '확인 중...';
+    adminPost({ action:'check', password:pw }).then(function(d){
+      if (d && d.ok){ adminPw = pw; closeAdminDialog(); enterAdmin(); }
+      else adminErr.textContent = (d && d.error === 'locked') ? '잠시 후 다시 시도해 주세요.' : '비밀번호가 맞지 않아요.';
+    }).catch(function(){ adminErr.textContent = '연결에 실패했어요. 잠시 후 다시 시도해 주세요.'; });
+  }
+  adminChk.addEventListener('change', function(){
+    if (adminChk.checked){ adminPwEl.value = ''; adminErr.textContent = ''; adminDialog.showModal(); adminPwEl.focus(); }
+    else exitAdmin();
+  });
+  document.getElementById('admin-cancel').addEventListener('click', function(){ closeAdminDialog(); adminChk.checked = false; });
+  adminDialog.addEventListener('cancel', function(){ adminChk.checked = false; });
+  document.getElementById('admin-go').addEventListener('click', adminLogin);
+  adminPwEl.addEventListener('keydown', function(ev){ if (ev.key === 'Enter'){ ev.preventDefault(); adminLogin(); } });
+
+  document.getElementById('admin-save').addEventListener('click', function(){
+    var now = currentMap(), changed = {}, n = 0;
+    Object.keys(now).forEach(function(k){ if (now[k] !== baseline[k]){ changed[k] = now[k]; n++; } });
+    if (!n) return adminSay('바뀐 문구가 없어요');
+    for (var k in changed){ if (!changed[k]) return adminSay('빈 문구는 저장할 수 없어요'); }
+    if (!ADMIN_ENDPOINT_URL) return adminSay('저장 주소가 없어 저장할 수 없어요');
+    adminSay('저장 중...');
+    adminPost({ action:'save', password:adminPw, texts:changed }).then(function(d){
+      if (d && d.ok){ baseline = currentMap(); adminSay('저장했어요 (' + n + '곳)'); }
+      else adminSay(d && d.error === 'auth' ? '비밀번호가 바뀌었어요. 다시 로그인해 주세요' : '저장하지 못했어요');
+    }).catch(function(){ adminSay('연결에 실패했어요'); });
+  });
+  document.getElementById('admin-undo').addEventListener('click', function(){ restoreBaseline(); adminSay('저장 전 상태로 되돌렸어요'); });
+  document.getElementById('admin-exit').addEventListener('click', exitAdmin);
 </script>
 </body>
 </html>
