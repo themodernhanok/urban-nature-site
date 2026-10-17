@@ -982,8 +982,7 @@
     { k:'sh1-desc', s:'.branch[data-key="sh1"] .desc' }, { k:'sh2-desc', s:'.branch[data-key="sh2"] .desc' },
     { k:'skku-desc', s:'.branch[data-key="skku"] .desc' }, { k:'hs-desc', s:'.branch[data-key="hs"] .desc' },
     { k:'vac-lock-title', s:'.vac-lock-title' }, { k:'vac-lock-sub', s:'.vac-lock .sec-sub' },
-    { k:'apply-sub', s:'#apply .sec-sub' }, { k:'apply-hours', s:'.reach li:nth-child(3) .v' }, { k:'apply-note', s:'#apply-note' },
-    { k:'foot-ceo', s:'.foot-legal .ph', i:0 }, { k:'foot-addr', s:'.foot-legal .ph', i:1 }
+    { k:'apply-sub', s:'#apply .sec-sub' }, { k:'apply-hours', s:'.reach li:nth-child(3) .v' }, { k:'apply-note', s:'#apply-note' }
   ];
   function resolveEl(e){ return document.querySelectorAll(e.s)[e.i || 0] || null; }
   function applyTexts(map){
