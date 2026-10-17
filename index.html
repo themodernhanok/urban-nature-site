@@ -650,7 +650,7 @@
       </div>
     </div>
 
-    <form class="form" id="apply-form">
+    <form class="form" id="apply-form" novalidate>
       <div class="form-row">
         <div class="field"><label for="f-name">이름</label><input id="f-name" name="name" type="text" placeholder="홍길동" required></div>
         <div class="field"><label for="f-phone">연락처</label><input id="f-phone" name="phone" type="tel" placeholder="010-0000-0000" required></div>
@@ -700,6 +700,13 @@
       <button type="submit" id="apply-submit">상담 신청</button>
       <p class="form-note" id="apply-note">제출하신 내용은 상담과 입주 안내에만 사용해요.</p>
     </form>
+
+    <dialog id="form-alert" class="consent-dialog">
+      <p class="consent-dialog-title">입력이 필요해요</p>
+      <p>아래 항목을 확인한 뒤 다시 상담 신청을 눌러 주세요.</p>
+      <ul id="form-alert-list"></ul>
+      <button type="button" class="consent-close" id="form-alert-ok">확인</button>
+    </dialog>
 
     <dialog id="done-dialog" class="consent-dialog">
       <p class="consent-dialog-title">상담 신청이 접수되었어요</p>
@@ -933,11 +940,33 @@
   // 신청서 제출 (Google Apps Script -> 구글 시트)
   var APPLY_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxdVn3VICdWEtuKBoEvikKi9B58SjP7CfQlqiJ5fum_u2zy2CtwPL_XjzZCLB8hygbx/exec";
 
+  var formAlertFocus = null;
+  var formAlert = document.getElementById('form-alert');
+  function closeFormAlert(){ if (formAlert.open) formAlert.close(); if (formAlertFocus) formAlertFocus.focus(); }
+  document.getElementById('form-alert-ok').addEventListener('click', closeFormAlert);
+  formAlert.addEventListener('click', function(ev){ if (ev.target === formAlert) closeFormAlert(); });
+
   document.getElementById('apply-form').addEventListener('submit', function(ev){
     ev.preventDefault();
     var form = ev.target;
     var note = document.getElementById('apply-note');
     var btn = document.getElementById('apply-submit');
+
+    var problems = [];
+    var nameEl = document.getElementById('f-name'), phoneEl = document.getElementById('f-phone');
+    var consentEl = form.querySelector('[name="consent"]');
+    if (!nameEl.value.trim()) problems.push({ el:nameEl, text:'이름을 입력해 주세요.' });
+    if (!phoneEl.value.trim()) problems.push({ el:phoneEl, text:'연락처를 입력해 주세요.' });
+    else if (phoneEl.value.replace(/\D/g, '').length < 9) problems.push({ el:phoneEl, text:'연락처를 숫자 9자리 이상으로 정확히 입력해 주세요.' });
+    if (!consentEl.checked) problems.push({ el:consentEl, text:'개인정보 수집·이용에 동의해 주세요.' });
+    if (problems.length){
+      var listEl = document.getElementById('form-alert-list');
+      listEl.textContent = '';
+      problems.forEach(function(p){ var li = document.createElement('li'); li.textContent = p.text; listEl.appendChild(li); });
+      formAlertFocus = problems[0].el;
+      document.getElementById('form-alert').showModal();
+      return;
+    }
 
     btn.disabled = true;
     btn.textContent = '제출 중...';
